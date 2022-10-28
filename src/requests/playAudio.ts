@@ -1,0 +1,20 @@
+import axios from "axios";
+
+interface playAudioParams {
+  "track-id": string | number | undefined;
+  from: string;
+  "album-id": string | number | undefined;
+  "play-id": string;
+  "track-length-seconds": number;
+  "total-played-seconds": number;
+  "end-position-seconds": number | undefined;
+  "playlist-id"?: string;
+}
+
+export const playAudio = async (request: playAudioParams) => {
+  const userData = JSON.parse(localStorage.getItem("user-data") || "");
+  await axios.post(
+    `http://localhost:3002/play-audio/username=${userData.username}/password=${userData.password}`,
+    request
+  );
+};

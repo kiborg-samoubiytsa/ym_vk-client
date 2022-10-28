@@ -1,0 +1,24 @@
+.playlistTitle {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  color: black;
+}
+.coverGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 100px);
+  margin-bottom: 4px;
+}
+.userPlaylistCover {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: flex-start;
+  justify-content: center;
+  height: 240px;
+}
+.playlistCover {
+  padding-bottom: 10px;
+}
+.userPlaylistCover:hover {
+  border: #6633cc solid 2px;
+}
