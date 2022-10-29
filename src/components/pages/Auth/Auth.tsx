@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Auth.module.scss";
 import logo from "../../../img/logo.png";
 import { validatePassword } from "../../../requests/validatePassword";
@@ -6,6 +6,7 @@ import { validatePassword } from "../../../requests/validatePassword";
 export const Auth = () => {
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const [formStyle, setFormStyle] = useState({});
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,8 +24,8 @@ export const Auth = () => {
         })
       );
       window.location.reload();
-      return true;
     }
+    setFormStyle({ border: "1px solid red" });
     return false;
   };
 
@@ -39,6 +40,7 @@ export const Auth = () => {
             className={styles.authFormField}
             placeholder="Email"
             ref={usernameInputRef}
+            style={formStyle}
           />
           <span className={styles.authFieldName}>Пароль:</span>
           <input
@@ -46,6 +48,7 @@ export const Auth = () => {
             className={styles.authFormField}
             placeholder="Пароль"
             ref={passwordInputRef}
+            style={formStyle}
           />
           <button type="submit" className={styles.submitButton}>
             Войти
