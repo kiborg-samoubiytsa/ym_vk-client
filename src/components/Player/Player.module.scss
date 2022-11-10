@@ -74,11 +74,12 @@
       }
     }
     .trackInfoContainer {
+      position: relative;
       display: flex;
-      margin-left: 10px;
+      margin-left: 50px;
       flex-direction: row;
       align-items: center;
-      /* animation: slide-in 0.3s forwards;  */
+      animation: slide-in 0.3s forwards;
       .trackInfo {
         display: flex;
         flex-direction: column;
@@ -188,9 +189,9 @@
       border-top: 9px solid white;
     }
   }
-}
-@keyframes slide-in {
-  100% {
-    transform: scaleX(0%);
+  @keyframes slide-in {
+    100% {
+      margin-left: 10px;
+    }
   }
 }

@@ -10,6 +10,11 @@ type Subscription = {
   orderId: number;
   finished: boolean;
 };
+export type RotorSettings2 = {
+  moodEnergy: string;
+  diversity?: string;
+  language: string;
+};
 type SubscriptionStatus = {
   autoRenewable: Array<Subscription>;
   nonAutoRenewableRemainder: { [key: string]: any };
@@ -146,9 +151,9 @@ export type IRotorTrack = {
   trackParameters: {
     bpm: number;
     energy: number;
-    hue: number
-  }
-}
+    hue: number;
+  };
+};
 export type IPlaylist = {
   owner: PlaylistOwner;
   playlistUuid: string;

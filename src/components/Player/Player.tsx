@@ -17,7 +17,7 @@ import { FaTheaterMasks } from "react-icons/fa";
 import styles from "./Player.module.scss";
 import { durationToMinutes } from "../../helpers/durationToMinutes";
 import { concatArtistNames } from "../../helpers/concatArtistNames";
-import { PlaylistTrack, IRotorTrack } from "../../types/types";
+import { PlaylistTrack, IRotorTrack, RotorSettings2 } from "../../types/types";
 import {
   selectIsPlaying,
   selectIndex,
@@ -34,8 +34,13 @@ import {
   setCurrentTrackId,
   fetchTrackUrl,
 } from "../../store/reducers/currentTrackSlice";
-import { fetchRotorQueue } from "../../store/reducers/rotorSlice";
+import {
+  fetchRotorQueue,
+  fetchRotorSettings,
+} from "../../store/reducers/rotorSlice";
 import { sendRotorFeedBack } from "../../requests/rotorFeedback";
+import { RotorSettings } from "./RotorSettings";
+import useFetch from "../../hooks/useFetch";
 
 interface Props {
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -56,7 +61,8 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   const [isReplayPlaylist, setIsReplayPlaylist] = useState<boolean>(false);
   const [displayTimeBar, setDisplayTimeBar] = useState<boolean>(false);
   const [cursorX, setCursorX] = useState<number>(0);
-  const [isVolumeHover, setIsVolumeHover] = useState<boolean>(false);
+  const [displayRotorSettings, setDisplayRotorSettings] =
+    useState<boolean>(false);
 
   //useRefs
 
@@ -104,6 +110,10 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   const cover = useSelector(trackCover);
   const artists = useSelector(trackArtists);
 
+  const { data, error } = useFetch<RotorSettings2>(
+    "http://localhost:3002/rotor/info"
+  );
+
   const src = useSelector(trackUrl);
 
   //others
@@ -130,14 +140,16 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     playIdRef.current = generatePlayId();
     if (trackLoadingStatus == "succeeded") {
       handleStartPlaying();
+      dispatch(
+        setCurrentTrackId(sourceQueue.tracks![index || 0].id.toString())
+      );
     }
+  }, [index, trackLoadingStatus]);
+
+  useEffect(() => {
     return () => {
       if (isQueuePresent.current) {
-        if (
-          trackLoadingStatus == "playing" &&
-          !isRadioMode &&
-          sourceQueue.tracks
-        ) {
+        if (!isRadioMode) {
           endAudioRequest(
             sourceQueue.tracks![index || 0].track,
             audioTimeRef.current,
@@ -145,7 +157,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
             fromRef.current,
             sourceQueue
           );
-          if (trackLoadingStatus == "playing" && isRadioMode) {
+          if (isRadioMode) {
             endAudioRequest(
               rotorQueue![index || 0].track,
               audioTimeRef.current,
@@ -156,7 +168,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
         }
       }
     };
-  }, [index, trackLoadingStatus]);
+  }, [index]);
 
   useEffect(() => {
     if (trackLoadingStatus == "succeeded" && !isPlaying) {
@@ -203,9 +215,6 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
           sourceQueue
         );
       }, 200);
-      dispatch(
-        setCurrentTrackId(sourceQueue.tracks![index || 0].id.toString())
-      );
     }
     if (rotorQueue && isRadioMode) {
       setTimeout(async () => {
@@ -382,6 +391,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
       ) {
         dispatch(setIsRadioMode(true));
         dispatch(setIndex(0));
+        dispatch(fetchRotorSettings());
         sendRotorFeedBack("radioStarted", "web-radio-playlist-autoflow");
       }
       if (!isReplayTrack && index < rotorQueue.length - 1 && isRadioMode) {
@@ -432,7 +442,14 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
             <div className={styles.controlButtons}>
               <IconContext.Provider value={{ size: "36px" }}>
                 {isRadioMode ? (
-                  <FaTheaterMasks className={styles.controlButton} />
+                  <FaTheaterMasks
+                    className={styles.controlButton}
+                    onClick={() =>
+                      displayRotorSettings
+                        ? setDisplayRotorSettings(false)
+                        : setDisplayRotorSettings(true)
+                    }
+                  />
                 ) : (
                   <BiSkipPrevious
                     onClick={handleSkipPrevious}
@@ -557,6 +574,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
             ) : (
               <></>
             )}
+            {displayRotorSettings ? <RotorSettings /> : <></>}
           </div>
         </div>
       ) : (

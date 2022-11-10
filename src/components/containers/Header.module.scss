@@ -20,7 +20,13 @@
     text-decoration: none;
     list-style-type: none;
   }
-  a:hover {
+  *:hover {
+    cursor: pointer;
     color: #fc363b;
+  }
+  .exitButton {
+    right: 18vw;
+    position: absolute;
+    color: #a7a2a3;
   }
 }

@@ -24,8 +24,7 @@ export const Auth = () => {
         })
       );
       window.location.reload();
-    }
-    setFormStyle({ border: "1px solid red" });
+    } else setFormStyle({ border: "1px solid red" });
     return false;
   };
 

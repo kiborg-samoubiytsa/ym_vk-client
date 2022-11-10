@@ -44,24 +44,57 @@ app.get(
     }
   }
 );
-app.get(/\/rotor\/username=(.+)\/password=(.+)/, async (req, res) => {
-  try {
-    await initApi(req.params["0"], req.params["1"]);
-    const userToken = api.user.token;
-    console.log(api.user.token);
-    const getRotor = await axios.get(
-      "https://api.music.yandex.net/rotor/station/user:onyourwave/tracks?settings2=true" /*  "https://api.music.yandex.net/rotor/account/status" */,
-      {
-        headers: {
-          Authorization: `OAuth ${userToken}`,
-        },
-      }
-    );
-    res.json(getRotor.data);
-  } catch (error) {
-    console.log(error);
+app.get(
+  /\/rotor\/station=(.+)\/username=(.+)\/password=(.+)/,
+  async (req, res) => {
+    try {
+      const stationType = req.params[0];
+      await initApi(req.params["1"], req.params["2"]);
+      const userToken = api.user.token;
+      console.log(api.user.token);
+      const getRotor = await axios.get(
+        `https://api.music.yandex.net/rotor/station/${stationType}/tracks?settings2=true` /*  "https://api.music.yandex.net/rotor/account/status" */,
+        {
+          headers: {
+            Authorization: `OAuth ${userToken}`,
+          },
+        }
+      );
+      res.json(getRotor.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
+
+app.post(
+  /\/rotor\/station=(.+)\/settings\/username=(.+)\/password=(.+)/,
+  async (req, res) => {
+    try {
+      const body = req.body;
+      if (!api.user.token) {
+        const username = req.params[1];
+        const password = req.params[2];
+        await initApi(username, password);
+      }
+      const token = await api.user.token;
+      const stationType = req.params[0];
+      await axios.post(
+        `https://api.music.yandex.net/rotor/station/${stationType}/settings2`,
+        body,
+        {
+          headers: {
+            Authorization: `OAuth ${token}`,
+          },
+        }
+      );
+      res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      res.status(400).end();
+    }
+  }
+);
 
 app.get(/\/similar\/(.+)/, async (req, res) => {
   try {
@@ -141,15 +174,13 @@ app.post(/\/play-audio\/username=(.+)\/password(.+)/, async (req, res) => {
     res.send(error);
   }
 });
-
 app.get(
   /\/playlists\/info\/user=(.+)\/kind=(.+)\/username=(.+)\/password=(.+)/,
   async (req, res) => {
-    if (!wrappedApi) {
-      await initWrappedApi(req.params["2"], req.params["3"]);
-      await initApi(req.params["2"], req.params["3"]);
-    }
     try {
+      if (!wrappedApi) {
+        await initWrappedApi(req.params["2"], req.params["3"]);
+      }
       const result = await wrappedApi.getPlaylist(
         `https://music.yandex.ru/users/${req.params["0"]}/playlists/${req.params["1"]}`
       );
@@ -175,15 +206,32 @@ app.get(
   }
 );
 
+app.get("/rotor/info", async (req, res) => {
+  try {
+    const token = await api.user.token;
+    const { data } = await axios.get(
+      "https://api.music.yandex.net/rotor/station/user:onyourwave/info",
+      {
+        headers: {
+          Authorization: `OAuth ${token}`,
+        },
+      }
+    );
+    res.send(data.result[0].settings2);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 app.post("/rotor/feedback/", async (req, res) => {
   try {
     const userToken = await api.user.token;
     const now = new Date();
-    const penis = { ...req.body, timestamp: now.toISOString() };
-    console.log(penis);
+    const requestData = { ...req.body, timestamp: now.toISOString() };
+    console.log(requestData);
     const feedback = await axios.post(
       `https://api.music.yandex.net/rotor/station/user:onyourwave/feedback`,
-      penis,
+      requestData,
       {
         headers: {
           Authorization: `OAuth ${userToken}`,
