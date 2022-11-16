@@ -5,6 +5,7 @@ interface playerState {
   isPlaying: boolean;
   index: number | null;
   currentTrackId: string;
+  currentTrackAlbumId: number;
   currentTrackCover: string;
   currentTrackTitle: string;
   currentTrackArtists: [];
@@ -16,6 +17,7 @@ const initialState: playerState = {
   isPlaying: false,
   index: null,
   currentTrackId: "",
+  currentTrackAlbumId: 0,
   currentTrackCover: "",
   currentTrackTitle: "",
   currentTrackArtists: [],
@@ -49,6 +51,9 @@ const currentTrack = createSlice({
     },
     setCurrentTrackId(state, action: PayloadAction<string>) {
       state.currentTrackId = action.payload;
+    },
+    setCurrentTrackAlbum(state, action: PayloadAction<number>) {
+      state.currentTrackAlbumId = action.payload;
     },
     setTrackStatus(
       state,
@@ -95,6 +100,13 @@ export const trackArtists = (state: RootState) =>
   state.currentTrack.currentTrackArtists;
 export const isTrackPlaying = (state: RootState) =>
   state.currentTrack.isPlaying;
-export const { setIsPlaying, setIndex, setCurrentTrackId, setTrackStatus } =
-  currentTrack.actions;
+export const trackAlbum = (state: RootState) =>
+  state.currentTrack.currentTrackAlbumId;
+export const {
+  setIsPlaying,
+  setIndex,
+  setCurrentTrackId,
+  setTrackStatus,
+  setCurrentTrackAlbum,
+} = currentTrack.actions;
 export default currentTrack.reducer;

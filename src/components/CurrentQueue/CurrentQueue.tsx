@@ -4,7 +4,7 @@ import Track from "../Track";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { currentQueue } from "../../store/reducers/currentQueueSlice";
-import { PlaylistTrack } from "../../types/types";
+import { PlaylistTrack, Track as ITrack } from "../../types/types";
 import { AiOutlineClose } from "react-icons/ai";
 import { IconContext } from "react-icons";
 
@@ -35,8 +35,8 @@ const CurrentQueuePage: FC<Props> = ({ setIsQueueDisplayed }) => {
       </div>
       <div className={styles.playlist}>
         <div className={styles.tracks}>
-          {playlist.tracks!.map((track: any, index: number) =>
-            !track.track.error ? (
+          {playlist.tracks!.map((track: PlaylistTrack, index: number) =>
+            track.track.availableForPremiumUsers ? (
               <Track
                 title={track.track.title}
                 id={track.track.id}
@@ -47,6 +47,7 @@ const CurrentQueuePage: FC<Props> = ({ setIsQueueDisplayed }) => {
                 artists={artists[index]}
                 duration={track.track.durationMs}
                 styles={styles}
+                albumId={track.track.albums[0].id}
               ></Track>
             ) : (
               <div key={index}></div>

@@ -7,6 +7,7 @@ import {
   trackCover,
   trackTitle,
   setTrackStatus,
+  setCurrentTrackAlbum,
 } from "../../store/reducers/currentTrackSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { IconContext } from "react-icons";
@@ -37,10 +38,12 @@ import {
 import {
   fetchRotorQueue,
   fetchRotorSettings,
+  rotorQueueStatus,
 } from "../../store/reducers/rotorSlice";
 import { sendRotorFeedBack } from "../../requests/rotorFeedback";
 import { RotorSettings } from "./RotorSettings";
 import useFetch from "../../hooks/useFetch";
+import { PlayerLikeButton } from "./PlayerLikeButton";
 
 interface Props {
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -106,6 +109,8 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     (state: RootState) => state.currentTrack.currentTrackId
   );
 
+  const rotorStatus = useSelector(rotorQueueStatus);
+
   const title = useSelector(trackTitle);
   const cover = useSelector(trackCover);
   const artists = useSelector(trackArtists);
@@ -140,9 +145,21 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     playIdRef.current = generatePlayId();
     if (trackLoadingStatus == "succeeded") {
       handleStartPlaying();
-      dispatch(
-        setCurrentTrackId(sourceQueue.tracks![index || 0].id.toString())
-      );
+      if (!isRadioMode) {
+        dispatch(
+          setCurrentTrackId(sourceQueue.tracks![index || 0].id.toString())
+        );
+        dispatch(
+          setCurrentTrackAlbum(
+            sourceQueue.tracks![index || 0].track.albums[0].id
+          )
+        );
+      } else {
+        dispatch(setCurrentTrackId(radioIdArray[index || 0].toString()));
+        dispatch(
+          setCurrentTrackAlbum(rotorQueue![index || 0].track.albums[0].id)
+        );
+      }
     }
   }, [index, trackLoadingStatus]);
 
@@ -313,6 +330,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     }
   };
   useEffect(() => {
+    //fetches rotor array if track playing is the last in playlist
     if (
       (index || index == 0) &&
       index + 1 > sourceQueue?.tracks!.length - 1 &&
@@ -320,6 +338,9 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     ) {
       dispatch(fetchRotorQueue());
     }
+  }, [sourceQueue, index, isRadioMode]);
+  useEffect(() => {
+    //fetches new rotor array when previous ends
     if (
       isRadioMode &&
       (index || index == 0) &&
@@ -327,7 +348,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     ) {
       dispatch(fetchRotorQueue());
     }
-  }, [index, sourceQueue, isRadioMode]);
+  }, [index, isRadioMode]);
 
   useEffect(() => {
     if (!isRadioMode && (index || index == 0)) {
@@ -361,7 +382,10 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   };
 
   const handleSkipNextRadio = (reason: "trackFinished" | "skip") => {
-    if (trackLoadingStatus == "playing" || trackLoadingStatus == "succeeded") {
+    if (
+      (trackLoadingStatus == "playing" || trackLoadingStatus == "succeeded") &&
+      rotorStatus == "succeeded"
+    ) {
       if (index || index == 0) {
         console.log(index);
         const newIndex = index + 1;
@@ -394,7 +418,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
         dispatch(fetchRotorSettings());
         sendRotorFeedBack("radioStarted", "web-radio-playlist-autoflow");
       }
-      if (!isReplayTrack && index < rotorQueue.length - 1 && isRadioMode) {
+      if (!isReplayTrack && index <= rotorQueue.length - 1 && isRadioMode) {
         handleSkipNextRadio("trackFinished");
       }
     }
@@ -486,13 +510,26 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
                 />
               </IconContext.Provider>
               <div className={styles.trackInfoContainer} draggable="false">
-                <img src={cover} alt={title} className={styles.trackCover} />
-                <div className={styles.trackInfo}>
-                  <span className={styles.title}>{title}</span>
-                  <span className={styles.artists}>
-                    {concatArtistNames(artists)}
-                  </span>
-                </div>
+                {trackLoadingStatus == "succeeded" ||
+                trackLoadingStatus == "playing" ? (
+                  <>
+                    <img
+                      src={cover}
+                      alt={title}
+                      className={styles.trackCover}
+                    />
+
+                    <div className={styles.trackInfo}>
+                      <span className={styles.title}>{title}</span>
+                      <span className={styles.artists}>
+                        {concatArtistNames(artists)}
+                      </span>
+                    </div>
+                    <PlayerLikeButton />
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
               <div className={styles.volumeControlsContainer}>
                 <div className={styles.volumeIconContainer}>

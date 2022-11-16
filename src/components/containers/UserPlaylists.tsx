@@ -1,10 +1,18 @@
 import { FC, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useFetch from "../../hooks/useFetch";
+import {
+  fetchFavoriteTracks,
+  favoriteTrackIds,
+} from "../../store/reducers/favoriteTracksSlice";
+import { AppDispatch } from "../../store/store";
 import { IPlaylist } from "../../types/types";
 import { PlaylistCover } from "../Playlist/PlaylistCover";
 import styles from "./UserPlaylists.module.scss";
 
 export const UserPlaylists: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const penis = useSelector(favoriteTrackIds);
   const sessionStoragePlaylists = sessionStorage.getItem("user-playlists")
     ? JSON.parse(sessionStorage.getItem("user-playlists") || "")
     : [];
@@ -13,11 +21,21 @@ export const UserPlaylists: FC = () => {
     `http://localhost:3002/user-playlists/username=${userData.username}/password=${userData.password}`
   );
   useEffect(() => {
-    if (sessionStoragePlaylists.length == 0 && data) {
+    if (
+      (sessionStoragePlaylists.length == 0 || !sessionStoragePlaylists) &&
+      data
+    ) {
       sessionStorage.setItem("user-playlists", JSON.stringify(data));
     }
     console.log(data);
-  });
+  }, []);
+  useEffect(() => {
+    dispatch(fetchFavoriteTracks());
+  }, []);
+  useEffect(() => {
+    console.log(penis);
+  }, [penis]);
+
   return (
     <>
       <div className={styles.userPlaylists}>

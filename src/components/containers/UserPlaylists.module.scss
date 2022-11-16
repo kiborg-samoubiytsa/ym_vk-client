@@ -5,8 +5,14 @@
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
   width: 50vw;
+  min-width: 960px;
   height: 86.9vh;
   margin-bottom: 0;
   overflow-y: hidden;
   background-color: #fff;
+}
+@media (max-width: 600px) {
+  .userPlaylists {
+    display: none;
+  }
 }

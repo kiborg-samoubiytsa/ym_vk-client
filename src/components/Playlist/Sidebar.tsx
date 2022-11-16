@@ -12,6 +12,8 @@ import {
   selectedPlaylist,
   isSelected,
 } from "../../store/reducers/selectedPlaylistSlice";
+import { PlaylistTrack as ITrack } from "../../types/types";
+import { favoriteTracksStatus } from "../../store/reducers/favoriteTracksSlice";
 
 interface Props {
   styles: any;
@@ -19,17 +21,21 @@ interface Props {
 
 export const SideBar: FC<Props> = ({ styles }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const loadingStatus = useSelector(playlistStatus);
+  const playlistLoadingStatus = useSelector(playlistStatus);
   const source = useSelector(selectedPlaylist);
   const isPlaylistSelected = useSelector(isSelected);
+  const favoriteLoadingStatus = useSelector(favoriteTracksStatus);
   const artists =
     source.tracks?.map((track: PlaylistTrack) => {
       return track.track.artists;
     }) || [];
   const tracks = source.tracks;
+
   return (
     <>
-      {isPlaylistSelected && loadingStatus == "succeeded" ? (
+      {isPlaylistSelected &&
+      playlistLoadingStatus == "succeeded" &&
+      favoriteLoadingStatus == "succeeded" ? (
         <div className={styles.sidebarTracks}>
           <div className={styles.source}>
             <span className={styles.playlistTitle}>
@@ -45,8 +51,8 @@ export const SideBar: FC<Props> = ({ styles }) => {
             </div>
           </div>
           <div className={styles.tracks}>
-            {tracks!.map((track: any, index: number) =>
-              track.track.available ? ( //displays track only if its available
+            {tracks!.map((track: ITrack, index: number) =>
+              track.track.availableForPremiumUsers ? ( //displays track only if its available
                 <Track
                   title={track.track.title}
                   id={track.track.id}
@@ -56,6 +62,7 @@ export const SideBar: FC<Props> = ({ styles }) => {
                   artists={artists[index]}
                   duration={track.track.durationMs}
                   styles={styles}
+                  albumId={track.track.albums[0].id}
                 ></Track>
               ) : (
                 <div key={index}></div>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { rotorSettingsChange } from "../../requests/rotorSettingsChange";
 import {
@@ -9,10 +9,13 @@ import {
   selectorTitles as titles,
   setSettingsValues,
   setSelectorTitles,
+  fetchRotorQueue,
 } from "../../store/reducers/rotorSlice";
 import styles from "./RotorSettings.module.scss";
 import classnames from "classnames";
 import { RotorSettings2 } from "../../types/types";
+import { AppDispatch } from "../../store/store";
+import { setIndex } from "../../store/reducers/currentTrackSlice";
 
 interface Props {
   styles: {
@@ -24,7 +27,8 @@ interface Props {
 
 export const RotorSettings: FC = () => {
   const rotorSettings = useSelector(settings);
-  const dispatch = useDispatch();
+  const isInitialRender = useRef<boolean>(true);
+  const dispatch = useDispatch<AppDispatch>();
   const selectorStyles = useSelector(settingsStyles);
   const selectorTitles = useSelector(titles);
   const currentStation = useSelector(station);
@@ -47,6 +51,8 @@ export const RotorSettings: FC = () => {
         moodSelector: e.currentTarget.textContent,
       })
     );
+    dispatch(fetchRotorQueue());
+    isInitialRender.current = false;
   };
 
   const handleDiversityChange = (
@@ -64,6 +70,8 @@ export const RotorSettings: FC = () => {
         diversitySelector: e.currentTarget.textContent,
       })
     );
+    dispatch(fetchRotorQueue());
+    isInitialRender.current = false;
   };
 
   const handleLanguageChange = (
@@ -81,13 +89,16 @@ export const RotorSettings: FC = () => {
         languageSelector: e.currentTarget.textContent,
       })
     );
+    dispatch(fetchRotorQueue());
+    isInitialRender.current = false;
   };
 
   useEffect(() => {
     if (
       rotorSettings.moodEnergy &&
       rotorSettings.language &&
-      rotorSettings.diversity
+      rotorSettings.diversity &&
+      !isInitialRender.current
     ) {
       rotorSettingsChange(
         {

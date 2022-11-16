@@ -5,11 +5,11 @@
   overflow-y: auto;
   height: 86.9vh;
   width: 24vw;
+  min-width: 440px;
   border-top: 1px solid #e5e5e5;
   border-left: 1px solid #e5e5e5;
   background-color: #fff;
   overflow-x: hidden;
-  flex-shrink: 0;
   .closeButton {
     size: 40px;
     position: absolute;
@@ -48,6 +48,7 @@
   user-select: none;
   position: relative;
   width: 100%;
+  box-sizing: border-box;
   height: 36px;
   text-align: start;
   align-items: center;
@@ -56,6 +57,13 @@
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 400;
   color: black;
+  .likeButton_active {
+    display: none;
+  }
+  .likeButton {
+    display: none;
+  }
+
   .index {
     position: relative;
     width: 20px;
@@ -197,5 +205,15 @@
   }
   .playingTrackAnimationContainer {
     display: none;
+  }
+  .likeButton_active {
+    cursor: pointer;
+    display: flex;
+    color: #5d6fe4;
+  }
+  .likeButton {
+    cursor: pointer;
+    display: flex;
+    color: #a7a2a3;
   }
 }

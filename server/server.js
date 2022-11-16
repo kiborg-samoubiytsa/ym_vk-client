@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const url = require("url");
 const { YMApi, WrappedYMApi } = require("ym-api");
 const { default: axios } = require("axios");
 const { v4: uuidv4 } = require("uuid");
@@ -111,7 +112,6 @@ app.get(/\/user-playlists\/username=(.+)\/password=(.+)/, async (req, res) => {
   try {
     await initApi(req.params["0"], req.params["1"]);
     const user = await api.getAccountStatus();
-    console.log(user);
     const result = await api.getUserPlaylists(user.account.uid);
     const getFavourites = await api.getPlaylist(3, user.account.uid);
     res.send([
@@ -219,6 +219,7 @@ app.get("/rotor/info", async (req, res) => {
     );
     res.send(data.result[0].settings2);
   } catch (error) {
+    res.status(400).end();
     console.log(error);
   }
 });
@@ -263,6 +264,91 @@ app.get(
     }
   }
 );
+
+app.post(
+  /tracks\/favorite\/add-multiple\/username=(.+)\/password=(.+)\/track-ids=(.+)/,
+  async (req, res) => {
+    try {
+      const username = req.params[0];
+      const password = req.params[1];
+      const params = new url.URLSearchParams({ "track-ids": req.params[2] });
+      await initApi(username, password);
+      const user = await api.getAccountStatus();
+      const userId = user.account.uid;
+      const token = api.user.token;
+      console.log(
+        await axios.post(
+          `https://api.music.yandex.net/users/${userId}/likes/tracks/add-multiple/`,
+          params.toString(),
+          {
+            headers: {
+              Authorization: `OAuth ${token}`,
+              "content-type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+      );
+      res.status(200).end();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+app.post(
+  /tracks\/favorite\/remove\/username=(.+)\/password=(.+)\/track-ids=(.+)/,
+  async (req, res) => {
+    try {
+      const username = req.params[0];
+      const password = req.params[1];
+      const params = new url.URLSearchParams({ "track-ids": req.params[2] });
+      await initApi(username, password);
+      const user = await api.getAccountStatus();
+      const userId = user.account.uid;
+      const token = api.user.token;
+      console.log(
+        await axios.post(
+          `https://api.music.yandex.net/users/${userId}/likes/tracks/remove/`,
+          params.toString(),
+          {
+            headers: {
+              Authorization: `OAuth ${token}`,
+              "content-type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+      );
+      res.status(200).end();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+app.get(/tracks\/favorite\/username=(.+)\/password=(.+)/, async (req, res) => {
+  try {
+    const username = req.params[0];
+    const password = req.params[1];
+    await initApi(username, password);
+    const user = await api.getAccountStatus();
+    const userId = user.account.uid;
+    const token = api.user.token;
+    const { data } = await axios.get(
+      `https://api.music.yandex.net/users/${userId}/likes/tracks/`,
+      {
+        headers: {
+          Authorization: `OAuth ${token}`,
+        },
+      }
+    );
+    const trackIds = data.result.library.tracks.map((track) => {
+      return track.id;
+    });
+    res.send(trackIds);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.listen(PORT, () => {
   console.log(PORT);

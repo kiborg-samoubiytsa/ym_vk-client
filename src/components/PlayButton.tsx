@@ -26,7 +26,7 @@ interface Props {
   playlistInfo?: IPlaylist;
   index: number;
   styles: any;
-  id: string;
+  id: string | number;
 }
 
 const PlayButton: FC<Props> = ({ index, styles, playlistInfo, id }) => {

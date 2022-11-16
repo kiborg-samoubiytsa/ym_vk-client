@@ -46,11 +46,7 @@ const initialState: IRotor = {
 export const fetchRotorQueue = createAsyncThunk(
   "fetch/rotorQueue",
   async () => {
-    const userData = JSON.parse(localStorage.getItem("user-data") || "");
-    const data = await getYourWaveSequence(
-      userData.username,
-      userData.password
-    );
+    const data = await getYourWaveSequence();
     console.log(data);
     return data;
   }
@@ -68,9 +64,6 @@ export const rotorSlice = createSlice({
   name: "rotorSlice",
   initialState: initialState,
   reducers: {
-    setRotorQueue(state, action: PayloadAction<IRotorTrack[]>) {
-      state.currentQueue = action.payload;
-    },
     setSettingsStyles(state, action: PayloadAction<IRotor["settingsStyles"]>) {
       state.settingsStyles = action.payload;
     },
@@ -190,6 +183,7 @@ export const rotorSlice = createSlice({
             state.selectorTitles.languageSelector = "Русский";
             state.settingsStyles.languageSelector = {
               ...state.settingsStyles.languageSelector,
+              transform: "translateX(0%)",
               transition: "transform 0.3s ease-out 0s",
             };
             break;
@@ -218,12 +212,8 @@ export const rotorSlice = createSlice({
       });
   },
 });
-export const {
-  setRotorQueue,
-  setSettingsStyles,
-  setSelectorTitles,
-  setSettingsValues,
-} = rotorSlice.actions;
+export const { setSettingsStyles, setSelectorTitles, setSettingsValues } =
+  rotorSlice.actions;
 export const currentStation = (state: RootState) =>
   state.rotorSliceReducer.currentStation;
 export const rotorSettings = (state: RootState) =>
@@ -232,4 +222,6 @@ export const settingsStyles = (state: RootState) =>
   state.rotorSliceReducer.settingsStyles;
 export const selectorTitles = (state: RootState) =>
   state.rotorSliceReducer.selectorTitles;
+export const rotorQueueStatus = (state: RootState) =>
+  state.rotorSliceReducer.queueStatus;
 export const rotorSliceReducer = rotorSlice.reducer;
