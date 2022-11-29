@@ -1,13 +1,13 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { IPlaylist } from "../../types/types";
-import styles from "./PlaylistCover.module.scss";
+import styles from "../../components/CollectionItemCover.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store/store";
+import { AppDispatch } from "../../store/store";
 import {
   fetchPlaylist,
-  setIsPlaylistSelected,
-  playlistStatus as loadingStatus,
-  selectedPlaylist as source,
+  setIsSelected,
+  status as playlistStatus,
+  selectedCollection as source,
 } from "../../store/reducers/selectedPlaylistSlice";
 
 interface Props {
@@ -16,12 +16,13 @@ interface Props {
 
 export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector(loadingStatus);
+  const status = useSelector(playlistStatus);
   const selectedPlaylist = useSelector(source);
   const handlePlaylistSelect = () => {
     if (
       (status == "succeeded" &&
-        playlistInfo!.playlistUuid != selectedPlaylist!.playlistUuid) ||
+        playlistInfo!.playlistUuid !=
+          (selectedPlaylist as IPlaylist).playlistUuid) ||
       status == "idle"
     ) {
       dispatch(
@@ -30,17 +31,17 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
           kind: playlistInfo?.kind,
         })
       );
-      dispatch(setIsPlaylistSelected(true));
+      dispatch(setIsSelected(true));
     }
     return;
   };
 
   return (
-    <div className={styles.userPlaylistCover} onClick={handlePlaylistSelect}>
+    <div className={styles.coverContainer} onClick={handlePlaylistSelect}>
       {playlistInfo?.cover.itemsUri?.length &&
       playlistInfo.cover.type == "mosaic" ? (
         playlistInfo?.cover.itemsUri?.length >= 4 ? (
-          <div className={styles.playlistCover}>
+          <div className={styles.cover}>
             <div className={styles.coverGrid}>
               {playlistInfo?.cover.itemsUri?.map((item, index) => (
                 <img
@@ -52,7 +53,7 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
             </div>
           </div>
         ) : (
-          <div className={styles.playlistCover}>
+          <div className={styles.cover}>
             <img
               src={`https://${playlistInfo?.cover.itemsUri[0].replace(
                 "%%",
@@ -63,21 +64,21 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
           </div>
         )
       ) : playlistInfo?.cover.uri ? (
-        <div className={styles.playlistCover}>
+        <div className={styles.cover}>
           <img
             src={`https://${playlistInfo?.cover.uri.replace("%%", "200x200")}`}
             alt="cover"
           ></img>
         </div>
       ) : (
-        <div className={styles.playlistCover}>
+        <div className={styles.cover}>
           <img
             src={`https://${playlistInfo?.ogImage.replace("%%", "200x200")}`}
             alt="cover"
           ></img>
         </div>
       )}
-      <div className={styles.playlistTitle}>{playlistInfo?.title}</div>
+      <div className={styles.title}>{playlistInfo?.title}</div>
     </div>
   );
 };

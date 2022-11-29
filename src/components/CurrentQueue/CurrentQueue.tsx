@@ -1,59 +1,43 @@
 import { FC } from "react";
 import styles from "./CurrentQueue.module.scss";
-import Track from "../Track";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { currentQueue } from "../../store/reducers/currentQueueSlice";
-import { PlaylistTrack, Track as ITrack } from "../../types/types";
-import { AiOutlineClose } from "react-icons/ai";
-import { IconContext } from "react-icons";
+import {
+  currentQueue as queue,
+  queueType as type,
+} from "../../store/reducers/currentQueueSlice";
+import { AlbumWithTracks, IPlaylist } from "../../types/types";
+import { QueueInfo } from "./QueueInfo";
+import { PlaylistQueue } from "./PlaylistQueue";
+import { AlbumQueue } from "./AlbumQueue";
 
 interface Props {
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CurrentQueuePage: FC<Props> = ({ setIsQueueDisplayed }) => {
-  const playlist = useSelector(currentQueue);
-  const artists = playlist.tracks!.map((track: PlaylistTrack) => {
-    return track.track.artists;
-  });
-  const images = playlist.tracks!.map((track: PlaylistTrack) => {
-    return `https://${track.track.ogImage!.replace("%%", "50x50")}`;
-  });
+  const currentQueue = useSelector(queue);
+  const queueType = useSelector(type);
   return (
     <div className={styles.currentQueue}>
-      <div className={styles.infoContainer}>
-        <div className={styles.closeButton}>
-          <IconContext.Provider value={{ size: "23" }}>
-            <AiOutlineClose onClick={() => setIsQueueDisplayed(false)} />
-          </IconContext.Provider>
-        </div>
-        <span className={styles.playlistInfo}>
-          <span className={styles.defaultText}>Сейчас играет: </span>
-          {playlist.kind == 3 ? "Мне нравится" : playlist.title}
-        </span>
-      </div>
+      <QueueInfo
+        styles={styles}
+        queueInfo={currentQueue}
+        setIsQueueDisplayed={setIsQueueDisplayed}
+      />
       <div className={styles.playlist}>
-        <div className={styles.tracks}>
-          {playlist.tracks!.map((track: PlaylistTrack, index: number) =>
-            track.track.availableForPremiumUsers ? (
-              <Track
-                title={track.track.title}
-                id={track.track.id}
-                trackCover={images[index]}
-                playlist={playlist}
-                index={index}
-                key={index}
-                artists={artists[index]}
-                duration={track.track.durationMs}
-                styles={styles}
-                albumId={track.track.albums[0].id}
-              ></Track>
-            ) : (
-              <div key={index}></div>
-            )
-          )}
-        </div>
+        {queueType == "playlist" ? (
+          <PlaylistQueue
+            currentQueue={currentQueue as Required<IPlaylist>}
+            styles={styles}
+          />
+        ) : queueType == "album" ? (
+          <AlbumQueue
+            currentQueue={currentQueue as AlbumWithTracks}
+            styles={styles}
+          />
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-.playlistTitle {
+.title {
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 400;
   color: black;
@@ -8,7 +8,7 @@
   grid-template-columns: repeat(2, 100px);
   margin-bottom: 4px;
 }
-.userPlaylistCover {
+.coverContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -17,9 +17,9 @@
   height: 240px;
   user-select: text;
 }
-.playlistCover {
+.cover {
   padding-bottom: 10px;
 }
-.userPlaylistCover:hover {
+.coverContainer:hover {
   border: #6633cc solid 2px;
 }

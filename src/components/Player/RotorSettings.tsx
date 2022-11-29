@@ -15,7 +15,6 @@ import styles from "./RotorSettings.module.scss";
 import classnames from "classnames";
 import { RotorSettings2 } from "../../types/types";
 import { AppDispatch } from "../../store/store";
-import { setIndex } from "../../store/reducers/currentTrackSlice";
 
 interface Props {
   styles: {

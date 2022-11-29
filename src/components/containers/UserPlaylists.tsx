@@ -8,11 +8,11 @@ import {
 import { AppDispatch } from "../../store/store";
 import { IPlaylist } from "../../types/types";
 import { PlaylistCover } from "../Playlist/PlaylistCover";
-import styles from "./UserPlaylists.module.scss";
+import styles from "./UserCollection.module.scss";
 
 export const UserPlaylists: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const penis = useSelector(favoriteTrackIds);
+  const favoriteTracks = useSelector(favoriteTrackIds);
   const sessionStoragePlaylists = sessionStorage.getItem("user-playlists")
     ? JSON.parse(sessionStorage.getItem("user-playlists") || "")
     : [];
@@ -30,15 +30,14 @@ export const UserPlaylists: FC = () => {
     console.log(data);
   }, []);
   useEffect(() => {
-    dispatch(fetchFavoriteTracks());
+    if (favoriteTracks.length == 0) {
+      dispatch(fetchFavoriteTracks());
+    }
   }, []);
-  useEffect(() => {
-    console.log(penis);
-  }, [penis]);
 
   return (
     <>
-      <div className={styles.userPlaylists}>
+      <div className={styles.userCollection}>
         {!error ? (
           sessionStoragePlaylists.length > 0 ? (
             sessionStoragePlaylists?.map(

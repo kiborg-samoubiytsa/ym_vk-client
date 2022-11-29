@@ -8,12 +8,19 @@
   margin-top: 0;
   margin-bottom: 0;
   background-color: white;
-  text-decoration: none;
-  list-style: none;
   font-family: "Clear Sans", sans-serif;
   font-weight: 700;
   font-size: 15px;
   justify-content: space-around;
+  ul {
+    margin-left: 18%;
+    margin-right: 18%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    text-decoration: none;
+    list-style: none;
+  }
   a {
     position: relative;
     color: #a7a2a3;
@@ -24,9 +31,16 @@
     cursor: pointer;
     color: #fc363b;
   }
-  .exitButton {
-    right: 18vw;
-    position: absolute;
-    color: #a7a2a3;
+  .exitButtonContainer:hover {
+    .exitButton {
+      cursor: pointer;
+      color: #fc363b;
+    }
+  }
+  .exitButtonContainer {
+    .exitButton {
+      color: #a7a2a3;
+      margin-right: 18%;
+    }
   }
 }

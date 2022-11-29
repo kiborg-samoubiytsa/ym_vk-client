@@ -4,7 +4,7 @@ import axios from "axios";
 interface playerState {
   isPlaying: boolean;
   index: number | null;
-  currentTrackId: string;
+  currentTrackId: number;
   currentTrackAlbumId: number;
   currentTrackCover: string;
   currentTrackTitle: string;
@@ -16,7 +16,7 @@ interface playerState {
 const initialState: playerState = {
   isPlaying: false,
   index: null,
-  currentTrackId: "",
+  currentTrackId: 0,
   currentTrackAlbumId: 0,
   currentTrackCover: "",
   currentTrackTitle: "",
@@ -49,7 +49,7 @@ const currentTrack = createSlice({
     setIndex(state, action: PayloadAction<number>) {
       state.index = action.payload;
     },
-    setCurrentTrackId(state, action: PayloadAction<string>) {
+    setCurrentTrackId(state, action: PayloadAction<number>) {
       state.currentTrackId = action.payload;
     },
     setCurrentTrackAlbum(state, action: PayloadAction<number>) {

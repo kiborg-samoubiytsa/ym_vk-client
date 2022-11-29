@@ -155,6 +155,7 @@ export type IRotorTrack = {
   };
 };
 export type IPlaylist = {
+  metadata: string;
   owner: PlaylistOwner;
   playlistUuid: string;
   available: boolean;
@@ -274,6 +275,7 @@ type Label = { id: number; name: string } | string;
 
 export type AlbumVolume = Array<Track>;
 export type Album = {
+  metadata: string;
   id: number;
   storageDir: string;
   coverUri: string;

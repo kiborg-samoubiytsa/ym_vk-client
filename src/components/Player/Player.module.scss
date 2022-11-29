@@ -196,3 +196,10 @@
     }
   }
 }
+@media (max-width: 800px) {
+  .playerContainer {
+    .playerActive {
+      min-width: 100vw;
+    }
+  }
+}

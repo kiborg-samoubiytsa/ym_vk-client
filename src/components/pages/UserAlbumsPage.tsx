@@ -1,10 +1,10 @@
-import { UserPlaylists } from "../containers/UserPlaylists";
+import { UserAlbums } from "../containers/UserAlbums";
 import { SideBar } from "../Sidebar/Sidebar";
 
-export const UserPlaylistsPage = () => {
+export const UserAlbumsPage = () => {
   return (
     <div className="User-Collection">
-      <UserPlaylists />
+      <UserAlbums />
       <SideBar />
     </div>
   );

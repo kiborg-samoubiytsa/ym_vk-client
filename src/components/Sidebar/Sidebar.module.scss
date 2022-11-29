@@ -1,4 +1,4 @@
-.sidebarTracks {
+.infoContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -75,25 +75,29 @@
     padding-left: 20px;
     padding-right: 15px;
   }
-  .artist {
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 10vw;
-    height: 24px;
-    padding-left: 20px;
+  .trackInfo {
     display: flex;
-    flex-direction: row;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 400;
-    color: black;
-  }
-  .title {
-    width: 10vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    width: 18vw;
+    .title {
+      width: 10vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .artist {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 10vw;
+      height: 24px;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: row;
+      font-family: "Source Sans Pro", sans-serif;
+      font-weight: 400;
+      color: #777;
+    }
   }
   .pauseButton {
     cursor: pointer;
@@ -156,26 +160,29 @@
     padding-left: 20px;
     padding-right: 15px;
   }
-  .artist {
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 10vw;
-    height: 24px;
-    padding-left: 20px;
+  .trackInfo {
+    width: 18vw;
     display: flex;
-    flex-direction: row;
-    font-family: "Source Sans Pro", sans-serif;
-    font-weight: 400;
-    color: black;
-  }
-  .title {
-    padding-left: 40px;
-    width: 10vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .artist {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 10vw;
+      height: 24px;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: row;
+      font-family: "Source Sans Pro", sans-serif;
+      font-weight: 400;
+    }
+    .title {
+      padding-left: 40px;
+      width: 10vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
   .pauseButton {
     cursor: pointer;
@@ -215,5 +222,11 @@
     cursor: pointer;
     display: flex;
     color: #a7a2a3;
+  }
+}
+
+@media (max-width: 800px) {
+  .infoContainer {
+    display: none;
   }
 }

@@ -1,10 +1,16 @@
-.User-playlists {
+.User-Collection {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   overflow-y: hidden;
+}
+.Content {
   background-color: #e5e5e5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .App::-webkit-scrollbar {
   width: 1px;

@@ -1,13 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import "./App.scss";
-import Player from "../Player/Player";
+import Player from "./Player/Player";
 import { Provider } from "react-redux";
-import { store } from "../../store/store";
+import { store } from "../store/store";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { UserPlaylistsPage } from "../pages/UserPlaylistsPage";
-import Header from "./Header";
-import CurrentQueuePage from "../CurrentQueue/CurrentQueue";
-import { Auth } from "../pages/Auth/Auth";
+import { UserPlaylistsPage } from "./pages/UserPlaylistsPage";
+import Header from "./Header/Header";
+import CurrentQueuePage from "./CurrentQueue/CurrentQueue";
+import { Auth } from "./pages/Auth/Auth";
+import { UserAlbumsPage } from "./pages/UserAlbumsPage";
 const App: FC = () => {
   //TODO менять текущий плейлист только по нажатию на трек
   const [isQueueDisplayed, setIsQueueDisplayed] = useState(false);
@@ -29,6 +30,7 @@ const App: FC = () => {
                     path="/playlists"
                     element={<UserPlaylistsPage />}
                   ></Route>
+                  <Route path="/albums" element={<UserAlbumsPage />}></Route>
                 </Routes>
               </div>
             )}

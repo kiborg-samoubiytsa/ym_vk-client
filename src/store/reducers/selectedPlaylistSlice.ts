@@ -1,18 +1,26 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { IPlaylist } from "../../types/types";
+import { AlbumWithTracks, IPlaylist } from "../../types/types";
 import axios from "axios";
 import { RootState } from "../store";
-import { Root } from "react-dom/client";
 
-interface playlistState {
+interface CollectionState {
   isPlaylistSelected: boolean;
-  playlistInfo: IPlaylist;
+  playlistInfo: IPlaylist | AlbumWithTracks;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | undefined;
+  type: "not-selected" | "playlist" | "album";
 }
 
+const initialState: CollectionState = {
+  isPlaylistSelected: false,
+  playlistInfo: {} as IPlaylist | AlbumWithTracks,
+  status: "idle",
+  error: undefined,
+  type: "not-selected",
+};
+
 export const fetchPlaylist = createAsyncThunk(
-  "playlist/fetchPlaylist",
+  "collection/fetchPlaylist",
   async ({ user, kind }: any): Promise<IPlaylist> => {
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     console.log(user, kind);
@@ -23,48 +31,28 @@ export const fetchPlaylist = createAsyncThunk(
     return data;
   }
 );
-const initialState: playlistState = {
-  isPlaylistSelected: false,
-  playlistInfo: {
-    owner: {
-      uid: 0,
-      login: "",
-      name: "",
-      verified: false,
-      sex: "",
-    },
-    playlistUuid: "",
-    available: false,
-    uid: 0,
-    kind: 0,
-    title: "",
-    revision: 0,
-    snapshot: 0,
-    trackCount: 0,
-    visibility: "",
-    collective: false,
-    created: "",
-    modified: "",
-    isBanner: false,
-    isPremiere: false,
-    durationMs: 0,
-    cover: { error: "", type: "", itemsUri: [], custom: false },
-    ogImage: "",
-    tags: [],
-    prerolls: [],
-    lastOwnerPlaylists: [],
-    tracks: [],
-  },
-  status: "idle",
-  error: undefined,
-};
+export const fetchAlbum = createAsyncThunk(
+  "collection/fetchAlbum",
+  async ({ albumId }: any): Promise<AlbumWithTracks> => {
+    const { data } = await axios.get(
+      `http://localhost:3002/album/with-tracks/id=${albumId}`
+    );
+    return data;
+  }
+);
 
 export const currentPlaylistSlice = createSlice({
   name: "tracks",
   initialState,
   reducers: {
-    setIsPlaylistSelected(state, action: PayloadAction<boolean>) {
+    setIsSelected(state, action: PayloadAction<boolean>) {
       state.isPlaylistSelected = action.payload;
+    },
+    setSelectedCollectionType(
+      state,
+      action: PayloadAction<CollectionState["type"]>
+    ) {
+      state.type = action.payload;
     },
   },
   extraReducers(builder) {
@@ -74,18 +62,32 @@ export const currentPlaylistSlice = createSlice({
       })
       .addCase(fetchPlaylist.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.type = "playlist";
         state.playlistInfo = action.payload;
       })
       .addCase(fetchPlaylist.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchAlbum.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAlbum.fulfilled, (state, action) => {
+        state.playlistInfo = action.payload;
+        state.status = "succeeded";
+        state.type = "album";
+      })
+      .addCase(fetchAlbum.rejected, (state, action) => {
+        state.status = "failed";
       });
   },
 });
-export const selectedPlaylist = (state: RootState) =>
+export const selectedCollection = (state: RootState) =>
   state.playlistSlice.playlistInfo;
-export const playlistStatus = (state: RootState) => state.playlistSlice.status;
+export const status = (state: RootState) => state.playlistSlice.status;
 export const isSelected = (state: RootState) =>
   state.playlistSlice.isPlaylistSelected;
-export const { setIsPlaylistSelected } = currentPlaylistSlice.actions;
+export const collectionType = (state: RootState) => state.playlistSlice.type;
+export const { setIsSelected, setSelectedCollectionType } =
+  currentPlaylistSlice.actions;
 export const playlistSlice = currentPlaylistSlice.reducer;

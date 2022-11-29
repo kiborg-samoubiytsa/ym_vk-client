@@ -5,6 +5,6 @@ interface Props {
   styles: any;
 }
 
-export const Cover: FC<Props> = ({ imageUrl, styles }) => {
+export const TrackCover: FC<Props> = ({ imageUrl, styles }) => {
   return <img className={styles.cover} src={imageUrl} alt="" />;
 };

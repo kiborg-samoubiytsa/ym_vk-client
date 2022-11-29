@@ -3,7 +3,6 @@ const cors = require("cors");
 const url = require("url");
 const { YMApi, WrappedYMApi } = require("ym-api");
 const { default: axios } = require("axios");
-const { v4: uuidv4 } = require("uuid");
 
 const api = new YMApi();
 
@@ -187,17 +186,7 @@ app.get(
       const tracksInfo = {
         //gets file information(bitrate, url)
         ...result,
-        tracks: await axios.all(
-          result.tracks.map((song) => {
-            return {
-              ...song,
-              track: {
-                ...song.track,
-                metadata: "web-own_playlists-playlist-track-fridge",
-              },
-            };
-          })
-        ),
+        metadata: "web-own_albums-album-track-fridge",
       };
       res.send(tracksInfo);
     } catch (error) {
@@ -205,6 +194,24 @@ app.get(
     }
   }
 );
+
+app.get(/\/album\/with-tracks\/id=(.+)/, async (req, res) => {
+  try {
+    const albumId = req.params[0];
+    const { data } = await axios.get(
+      `https://api.music.yandex.net/albums/${albumId}/with-tracks`
+    ); //web-own_albums-album-track-fridge
+
+    const tracksInfo = {
+      //gets file information(bitrate, url)
+      ...data.result,
+      metadata: "web-own_albums-album-track-fridge",
+    };
+    res.send(tracksInfo);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.get("/rotor/info", async (req, res) => {
   try {
@@ -324,6 +331,29 @@ app.post(
     }
   }
 );
+
+app.get(/\/user-albums\/username=(.+)\/password=(.+)/, async (req, res) => {
+  try {
+    if (!api.user.token || api.user.token == "") {
+      const username = req.params[0];
+      const password = req.params[1];
+      await initApi(username, password);
+    }
+    const user = await api.getAccountStatus();
+    const userId = user.account.uid;
+    const token = api.user.token;
+    const { data } = await axios.get(
+      `https://api.music.yandex.net/users/${userId}/likes/albums?rich=true`,
+      { headers: { Authorization: `OAuth ${token}` } }
+    );
+    const mappedAlbums = data.result.map((e) => {
+      return e.album;
+    });
+    res.send(mappedAlbums);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.get(/tracks\/favorite\/username=(.+)\/password=(.+)/, async (req, res) => {
   try {
