@@ -12,7 +12,7 @@ import styles from "./Sidebar.module.scss";
 import { PlaylistSidebar } from "./PlaylistSidebar";
 import { AlbumSidebar } from "./AlbumSidebar";
 
-export const SideBar: FC = () => {
+export const Sidebar: FC = () => {
   const collectionLoadingStatus = useSelector(loadingStatus);
   const source = useSelector(selectedCollection);
   const collectionType = useSelector(type);

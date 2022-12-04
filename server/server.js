@@ -201,11 +201,10 @@ app.get(/\/album\/with-tracks\/id=(.+)/, async (req, res) => {
     const { data } = await axios.get(
       `https://api.music.yandex.net/albums/${albumId}/with-tracks`
     ); //web-own_albums-album-track-fridge
-
     const tracksInfo = {
       //gets file information(bitrate, url)
       ...data.result,
-      metadata: "web-own_albums-album-track-fridge",
+      metadata: "web-own_albums-album-track-fridge", //TODO придумать, как сюда добавить подкасты (web-own_podcasts-album-track-fridge)
     };
     res.send(tracksInfo);
   } catch (error) {
@@ -347,13 +346,47 @@ app.get(/\/user-albums\/username=(.+)\/password=(.+)/, async (req, res) => {
       { headers: { Authorization: `OAuth ${token}` } }
     );
     const mappedAlbums = data.result.map((e) => {
-      return e.album;
+      if (e.album.metaType == "music") {
+        return e.album;
+      }
+      return;
     });
+    console.log(mappedAlbums);
     res.send(mappedAlbums);
   } catch (error) {
     console.log(error);
   }
 });
+
+app.get(
+  /\/user-albums\/podcasts\/username=(.+)\/password=(.+)/,
+  async (req, res) => {
+    try {
+      if (!api.user.token || api.user.token == "") {
+        const username = req.params[0];
+        const password = req.params[1];
+        await initApi(username, password);
+      }
+      const user = await api.getAccountStatus();
+      const userId = user.account.uid;
+      const token = api.user.token;
+      const { data } = await axios.get(
+        `https://api.music.yandex.net/users/${userId}/likes/albums?rich=true`,
+        { headers: { Authorization: `OAuth ${token}` } }
+      );
+      const filteredAlbums = data.result.filter((e) => {
+        return e.album.metaType == "podcast";
+      });
+      const mappedAlbums = filteredAlbums.map((e) => {
+        return e.album;
+      });
+      console.log(mappedAlbums);
+      res.send(mappedAlbums);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 app.get(/tracks\/favorite\/username=(.+)\/password=(.+)/, async (req, res) => {
   try {

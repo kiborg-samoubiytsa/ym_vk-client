@@ -11,21 +11,26 @@ const Header: FC<{}> = () => {
   };
   return (
     <div className={styles.header}>
-      <ul className={styles.optionsList}>
-        <li>
-          <Link to="/playlists">ПЛЕЙЛИСТЫ</Link>
-        </li>
-        <li>
-          <Link to="/albums">АЛЬБОМЫ</Link>
-        </li>
-      </ul>
-      <div className={styles.exitButtonContainer}>
-        <IconContext.Provider value={{ size: "24" }}>
-          <MdOutlineExitToApp
-            onClick={handleAccountExit}
-            className={styles.exitButton}
-          />
-        </IconContext.Provider>
+      <div className={styles.contentContainer}>
+        <ul className={styles.optionsList}>
+          <li>
+            <Link to="/playlists">Плейлисты</Link>
+          </li>
+          <li>
+            <Link to="/albums">Альбомы</Link>
+          </li>
+          <li>
+            <Link to="/podcasts">Подкасты и Книги</Link>
+          </li>
+        </ul>
+        <div className={styles.exitButtonContainer}>
+          <IconContext.Provider value={{ size: "24" }}>
+            <MdOutlineExitToApp
+              onClick={handleAccountExit}
+              className={styles.exitButton}
+            />
+          </IconContext.Provider>
+        </div>
       </div>
     </div>
   );

@@ -1,18 +1,38 @@
-.userCollection {
-  display: grid;
-  grid-template-columns: repeat(4, 220px);
-  justify-content: center;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
-  width: 50vw;
+.userCollectionContainer {
+  overflow-y: auto;
   min-width: 960px;
   height: 86.9vh;
-  margin-bottom: 0;
-  overflow-y: hidden;
   background-color: #fff;
+  width: 50vw;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  flex-direction: column;
+  .collectionInfo {
+    display: flex;
+    font-size: 36px;
+    font-family: "Clear Sans", sans-serif;
+    padding-left: 3vw;
+  }
+  .userCollection {
+    padding-top: 20px;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 220px);
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #fff;
+    min-width: 960px;
+    margin-bottom: 0;
+    height: calc(86.9vh - 20px);
+    overflow-y: hidden;
+  }
 }
 @media (max-width: 800px) {
-  .userCollection {
-    grid-template-columns: repeat(2, 220px);
+  .userCollectionContainer {
+    .collectionInfo {
+      justify-content: center;
+    }
+    .userCollection {
+      grid-template-columns: repeat(2, 220px);
+    }
   }
 }

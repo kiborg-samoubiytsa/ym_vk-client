@@ -1,9 +1,14 @@
 export const durationToMinutes = (duration: number) => {
-  const seconds = new Date(duration);
-  if (seconds.getSeconds() < 10 && duration >= 0) {
-    return `${seconds.getMinutes()}:0${seconds.getSeconds()}`;
-  }
+  const parsedDuration = new Date(duration);
+  const minutes = parsedDuration.getMinutes();
+  const hours = parsedDuration.getHours();
+  const seconds = parsedDuration.getSeconds();
+
   if (duration < 0) {
     return "0:00";
-  } else return `${seconds.getMinutes()}:${seconds.getSeconds()}`;
+  } else if (seconds > 10) {
+    return `${minutes + (hours - 3) * 60}:${seconds}`;
+  } else if (seconds < 10) {
+    return `${minutes + (hours - 3) * 60}:0${seconds}`;
+  }
 };

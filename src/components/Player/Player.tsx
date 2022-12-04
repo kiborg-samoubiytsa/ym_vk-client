@@ -305,6 +305,13 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     );
   };
 
+  const changeStorageVolumeValue = () => {
+    localStorage.setItem(
+      "user-volume",
+      JSON.stringify(volumeRangeRef.current?.valueAsNumber || 0)
+    );
+  };
+
   useEffect(() => {
     if (audioRef.current?.volume || audioRef.current?.volume == 0) {
       audioRef.current.volume = volume;
@@ -314,10 +321,6 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   const handleVolumeChange = () => {
     if (audioRef.current?.volume || audioRef.current?.volume == 0) {
       setVolume(volumeRangeRef.current?.valueAsNumber || 0);
-      localStorage.setItem(
-        "user-volume",
-        JSON.stringify(volumeRangeRef.current?.valueAsNumber || 0)
-      );
     }
   };
 
@@ -458,7 +461,18 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     }
   };
   return (
-    <div>
+    <div
+      onKeyDown={(e) => {
+        if (isPlaying) {
+          if (e.key == " ") {
+            handlePause();
+          }
+        } else if (e.key == " ") {
+          handleResumePlaying();
+        }
+      }}
+      tabIndex={0}
+    >
       {isPlayerVisible ? (
         <div className={styles.playerContainer}>
           <div className={styles.playerActive}>
@@ -527,7 +541,6 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
                 )}
                 <BiSkipNext
                   onClick={() => {
-                    console.log("dick");
                     isRadioMode
                       ? handleSkipNextRadio("skip")
                       : handleSkipNextPlaylist();
@@ -545,7 +558,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
                   }
                 />
               </IconContext.Provider>
-              <div className={styles.trackInfoContainer} draggable="false">
+              <div className={styles.trackInfoContainer}>
                 {trackLoadingStatus == "succeeded" ||
                 trackLoadingStatus == "playing" ? (
                   <>
@@ -601,6 +614,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
                     step={0.01}
                     onChange={handleVolumeChange}
                     ref={volumeRangeRef}
+                    onClick={() => changeStorageVolumeValue()}
                     className={styles.volumeValue}
                   />
                 </div>

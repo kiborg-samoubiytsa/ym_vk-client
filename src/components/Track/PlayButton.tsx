@@ -43,10 +43,6 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
   const isPlayerVisible = useSelector(isVisible);
   const isTrackPlaying = useSelector(isPlaying);
 
-  useEffect(() => {
-    console.log(collectionType);
-  });
-
   const handlePlay = () => {
     //если выбран альбом, а играет трек из плейлиста и нажимается кнопка в текущей очереди, то пиздец
     //TODO пофиксить это
@@ -91,7 +87,6 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
       dispatch(setCurrentQueue(collectionInfo as IPlaylist));
       dispatch(setQueueType("playlist"));
     } else {
-      console.log(5);
       dispatch(setIsPlaying(true));
     }
   };

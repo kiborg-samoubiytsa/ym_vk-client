@@ -1,9 +1,8 @@
 import { FC } from "react";
 import { AlbumWithTracks, IPlaylist } from "../../types/types";
-import { AiOutlineClose } from "react-icons/ai";
-import { IconContext } from "react-icons";
 import { useSelector } from "react-redux";
 import { queueType as type } from "../../store/reducers/currentQueueSlice";
+import { CloseButton } from "./QueueCloseButton";
 interface Props {
   styles: any;
   queueInfo: AlbumWithTracks | IPlaylist;
@@ -18,11 +17,10 @@ export const QueueInfo: FC<Props> = ({
   return (
     <div>
       <div className={styles.infoContainer}>
-        <div className={styles.closeButton}>
-          <IconContext.Provider value={{ size: "23" }}>
-            <AiOutlineClose onClick={() => setIsQueueDisplayed(false)} />
-          </IconContext.Provider>
-        </div>
+        <CloseButton
+          styles={styles}
+          setIsQueueDisplayed={setIsQueueDisplayed}
+        />
         <span className={styles.playingQueueInfo}>
           <>
             <span className={styles.defaultText}>Сейчас играет: </span>
