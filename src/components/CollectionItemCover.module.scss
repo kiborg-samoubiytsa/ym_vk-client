@@ -21,13 +21,29 @@
   margin-bottom: 10px;
   background-color: transparent;
   .coverPlayButtonContainer {
-    width: 25px;
-    height: 25px;
-    background-color: #6633cc;
+    display: none;
     .coverPlayButton {
+      display: none;
     }
   }
 }
 .coverContainer:hover {
   border: #6633cc solid 2px;
+  .coverPlayButtonContainer {
+    cursor: pointer;
+    margin-top: 75px;
+    margin-left: 75px;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #6633cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .coverPlayButton {
+      display: flex;
+      color: white;
+    }
+  }
 }

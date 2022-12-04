@@ -30,7 +30,7 @@ import {
 } from "../../store/reducers/currentTrackSlice";
 import {
   setIsRadioMode,
-  toggleIsPlayerVisible,
+  isPlayerVisible as isVisible,
 } from "../../store/reducers/playerSlice";
 import { AppDispatch, RootState } from "../../store/store";
 import { startAudioRequest } from "../../requests/startAudioRequest";
@@ -86,7 +86,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
 
   //useSelectors
 
-  const isPlayerVisible = useSelector(toggleIsPlayerVisible);
+  const isPlayerVisible = useSelector(isVisible);
 
   const sourceQueue = useSelector(
     (state: RootState) => state.currentQueueSlice.currentQueue

@@ -9,6 +9,7 @@ import {
   status as playlistStatus,
   selectedCollection as source,
 } from "../../store/reducers/selectedPlaylistSlice";
+import { CoverPlayButton } from "../CoverPlayButton";
 
 interface Props {
   playlistInfo: IPlaylist | undefined;
@@ -16,14 +17,14 @@ interface Props {
 
 export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector(playlistStatus);
+  const collectionStatus = useSelector(playlistStatus);
   const selectedPlaylist = useSelector(source);
   const handlePlaylistSelect = () => {
     if (
-      (status == "succeeded" &&
+      (collectionStatus == "succeeded" &&
         playlistInfo!.playlistUuid !=
           (selectedPlaylist as IPlaylist).playlistUuid) ||
-      status == "idle"
+      collectionStatus == "idle"
     ) {
       dispatch(
         fetchPlaylist({
@@ -38,46 +39,46 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
 
   return (
     <div className={styles.coverContainer} onClick={handlePlaylistSelect}>
-      {playlistInfo?.cover.itemsUri?.length &&
-      playlistInfo.cover.type == "mosaic" ? (
-        playlistInfo?.cover.itemsUri?.length >= 4 ? (
-          <div className={styles.cover}>
-            <div className={styles.coverGrid}>
-              {playlistInfo?.cover.itemsUri?.map((item, index) => (
-                <img
-                  key={index}
-                  src={`https://${item.replace("%%", "100x100")}`}
-                  alt="cover"
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className={styles.cover}>
+      <div className={styles.cover}>
+        <>
+          <CoverPlayButton playlistInfo={playlistInfo} styles={styles} />
+          {playlistInfo?.cover.itemsUri?.length &&
+          playlistInfo.cover.type == "mosaic" ? (
+            playlistInfo?.cover.itemsUri?.length >= 4 ? (
+              <div className={styles.coverGrid}>
+                {playlistInfo?.cover.itemsUri?.map((item, index) => (
+                  <img
+                    key={index}
+                    src={`https://${item.replace("%%", "100x100")}`}
+                    alt="cover"
+                  />
+                ))}
+              </div>
+            ) : (
+              <img
+                src={`https://${playlistInfo?.cover.itemsUri[0].replace(
+                  "%%",
+                  "200x200"
+                )}`}
+                alt="cover"
+              ></img>
+            )
+          ) : playlistInfo?.cover.uri ? (
             <img
-              src={`https://${playlistInfo?.cover.itemsUri[0].replace(
+              src={`https://${playlistInfo?.cover.uri.replace(
                 "%%",
                 "200x200"
               )}`}
               alt="cover"
             ></img>
-          </div>
-        )
-      ) : playlistInfo?.cover.uri ? (
-        <div className={styles.cover}>
-          <img
-            src={`https://${playlistInfo?.cover.uri.replace("%%", "200x200")}`}
-            alt="cover"
-          ></img>
-        </div>
-      ) : (
-        <div className={styles.cover}>
-          <img
-            src={`https://${playlistInfo?.ogImage.replace("%%", "200x200")}`}
-            alt="cover"
-          ></img>
-        </div>
-      )}
+          ) : (
+            <img
+              src={`https://${playlistInfo?.ogImage.replace("%%", "200x200")}`}
+              alt="cover"
+            ></img>
+          )}
+        </>
+      </div>
       <div className={styles.title}>{playlistInfo?.title}</div>
     </div>
   );

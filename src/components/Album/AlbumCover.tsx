@@ -9,6 +9,7 @@ import {
   setIsSelected,
 } from "../../store/reducers/selectedPlaylistSlice";
 import { AppDispatch } from "../../store/store";
+import { CoverPlayButton } from "../CoverPlayButton";
 
 interface Props {
   albumInfo: Album;
@@ -16,12 +17,13 @@ interface Props {
 
 export const AlbumCover: FC<Props> = ({ albumInfo }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const status = useSelector(loadingStatus);
+  const collectionStatus = useSelector(loadingStatus);
   const selectedAlbum = useSelector(selectedCollection);
   const selectAlbum = () => {
     if (
-      ((selectedAlbum as Album).id != albumInfo.id && status == "succeeded") ||
-      status == "idle"
+      ((selectedAlbum as Album).id != albumInfo.id &&
+        collectionStatus == "succeeded") ||
+      collectionStatus == "idle"
     ) {
       dispatch(fetchAlbum({ albumId: albumInfo.id }));
       dispatch(setIsSelected(true));
@@ -37,6 +39,7 @@ export const AlbumCover: FC<Props> = ({ albumInfo }) => {
     >
       {
         <div className={styles.cover}>
+          <CoverPlayButton styles={styles} albumInfo={albumInfo} />
           <img
             src={`https://${albumInfo.coverUri.replace("%%", "200x200")}`}
             alt="cover"

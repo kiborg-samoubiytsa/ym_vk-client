@@ -86,6 +86,13 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
     ) {
       dispatch(setCurrentQueue(collectionInfo as IPlaylist));
       dispatch(setQueueType("playlist"));
+    }
+    if (
+      collectionType == "playlist" &&
+      collectionInfo?.trackCount != source.trackCount
+    ) {
+      dispatch(setCurrentQueue(collectionInfo as IPlaylist));
+      dispatch(setQueueType("playlist"));
     } else {
       dispatch(setIsPlaying(true));
     }
