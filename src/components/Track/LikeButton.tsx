@@ -10,7 +10,7 @@ import {
 } from "../../store/reducers/favoriteTracksSlice";
 
 interface Props {
-  id: number;
+  id: number | string;
   styles: any;
   album: number;
 }

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useDispatch } from "react-redux";
-import { setSelectedCollectionType } from "../../store/reducers/selectedPlaylistSlice";
+import { setSelectedCollectionType } from "../../store/reducers/selectedCollectionSlice";
 import { IconContext } from "react-icons";
 import { AiOutlineClose } from "react-icons/ai";
 

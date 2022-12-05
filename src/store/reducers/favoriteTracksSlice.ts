@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import axios from "axios";
-import { Track } from "../../types/types";
 
 interface FavoriteTracks {
   ids: string[];
@@ -18,7 +17,7 @@ export const fetchFavoriteTracks = createAsyncThunk(
   async () => {
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/tracks/favorite/username=${userData.username}/password=${userData.password}`
+      `http://localhost:3002/tracks/favorite/uid=${userData.uid}/token=${userData.token}`
     );
     return data;
   }

@@ -1,5 +1,5 @@
 import { playAudio } from "./playAudio";
-import { IPlaylist, Track } from "../types/types";
+import { Album, IPlaylist, Track } from "../types/types";
 
 export const endAudioRequest = async (
   track: Track,
@@ -13,7 +13,7 @@ export const endAudioRequest = async (
     await playAudio({
       from: metadata || "web-own_playlists-playlist-track-fridge",
       "track-id": track.id,
-      "album-id": track.albums[0].id,
+      "album-id": track.albums[0].id ? track.albums[0].id : undefined,
       "play-id": playId,
       "track-length-seconds": totalSeconds,
       "total-played-seconds": secondsPlayed,

@@ -6,10 +6,10 @@ export const validatePassword = async (
 ) => {
   try {
     if (username && password) {
-      await axios.get(
+      const { data } = await axios.get(
         `http://localhost:3002/validate-password/username=${username}/password=${password}`
       );
-      return true;
+      return data;
     }
   } catch (error) {
     return false;

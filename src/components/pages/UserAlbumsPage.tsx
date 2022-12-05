@@ -1,11 +1,11 @@
-import { UserAlbums } from "../containers/UserAlbums";
-import { Sidebar } from "../Sidebar/Sidebar";
+import { UserAlbums } from "../UserPages/UserAlbums";
+import { TracksSidebar } from "../Sidebar/TrackQueueSidebar/TracksSidebar";
 
 export const UserAlbumsPage = () => {
   return (
     <div className="User-Collection">
       <UserAlbums />
-      <Sidebar />
+      <TracksSidebar />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getYourWaveSequence } from "../../requests/getYourWaveSequence";
 import { rotorSettingsChange } from "../../requests/rotorSettingsChange";
-import { getRotorSettings } from "../../requests/rotorInfoRequest";
+import { getRotorSettings } from "../../requests/getRotorSettings";
 import { IRotorTrack, RotorSettings2 } from "../../types/types";
 import { RootState } from "../store";
 
@@ -31,7 +31,6 @@ const initialState: IRotor = {
     moodEnergy: "all",
     language: "any",
   },
-  settingsStatus: "idle",
   settingsStyles: {
     moodSelector: { width: "100px", transform: "translateX(400%)" },
     diversitySelector: { width: "125px", transform: "translateX(300%)" },
@@ -42,6 +41,7 @@ const initialState: IRotor = {
     diversitySelector: "Любое",
     languageSelector: "Любой",
   },
+  settingsStatus: "idle",
 };
 export const fetchRotorQueue = createAsyncThunk(
   "fetch/rotorQueue",

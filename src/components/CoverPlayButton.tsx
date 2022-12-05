@@ -36,10 +36,10 @@ export const CoverPlayButton: FC<Props> = ({
       dispatch(setQueueType("playlist"));
       dispatch(setCurrentQueue(trackQueue));
       dispatch(setIndex(0));
+      dispatch(setIsPlaying(true));
     }
     if (albumInfo) {
       const trackQueue = await getQueueFromCollection("album", albumInfo);
-      console.log(trackQueue);
       dispatch(setQueueType("album"));
       dispatch(setCurrentQueue(trackQueue));
       dispatch(setIndex(0));

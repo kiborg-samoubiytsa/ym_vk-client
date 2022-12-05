@@ -7,26 +7,36 @@ export const sendRotorFeedBack = async (
   playedSeconds?: number
 ) => {
   const now = new Date();
+  const userData = JSON.parse(localStorage.getItem("user-data") || "");
   if ((type == "trackStarted" || type == "like") && track) {
-    await axios.post("http://localhost:3002/rotor/feedback/", {
-      trackId: track,
-      type: type,
-      timestamp: now.toISOString(),
-    });
+    await axios.post(
+      `http://localhost:3002/rotor/feedback/token=${userData.token}`,
+      {
+        trackId: track,
+        type: type,
+        timestamp: now.toISOString(),
+      }
+    );
   }
   if ((type == "skip" || type == "trackFinished") && track) {
-    await axios.post("http://localhost:3002/rotor/feedback/", {
-      trackId: track,
-      type: type,
-      totalPlayedSeconds: playedSeconds,
-      timestamp: now.toISOString(),
-    });
+    await axios.post(
+      `http://localhost:3002/rotor/feedback/token=${userData.token}`,
+      {
+        trackId: track,
+        type: type,
+        totalPlayedSeconds: playedSeconds,
+        timestamp: now.toISOString(),
+      }
+    );
   }
   if (type == "radioStarted") {
-    await axios.post("http://localhost:3002/rotor/feedback/", {
-      type: type,
-      from: from,
-      timestamp: now.toISOString(),
-    });
+    await axios.post(
+      `http://localhost:3002/rotor/feedback/token=${userData.token}`,
+      {
+        type: type,
+        from: from,
+        timestamp: now.toISOString(),
+      }
+    );
   }
 };

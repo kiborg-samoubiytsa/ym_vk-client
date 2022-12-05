@@ -14,8 +14,8 @@ import {
 import { favoriteTrackIds } from "../../store/reducers/favoriteTracksSlice";
 
 interface Props {
-  id: number;
-  albumId: number;
+  id: number | string;
+  albumId?: number;
   title: string;
   index: number;
   artists?: IArtist[];
@@ -65,7 +65,11 @@ const Track: FC<Props> = ({
             <></>
           )}
         </div>
-        <LikeButton id={id} styles={styles} album={albumId} />
+        {albumId ? (
+          <LikeButton id={id} styles={styles} album={albumId} />
+        ) : (
+          <></>
+        )}
         <Duration duration={duration} styles={styles}></Duration>
       </div>
     </>

@@ -16,11 +16,16 @@ export const Auth = () => {
         passwordInputRef.current?.value
       )
     ) {
+      const data = await validatePassword(
+        usernameInputRef.current?.value,
+        passwordInputRef.current?.value
+      );
+      console.log(data);
       localStorage.setItem(
         "user-data",
         JSON.stringify({
-          username: usernameInputRef.current?.value,
-          password: passwordInputRef.current?.value,
+          uid: data.uid,
+          token: data.token,
         })
       );
       window.location.reload();

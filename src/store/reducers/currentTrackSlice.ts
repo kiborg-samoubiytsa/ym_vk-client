@@ -4,8 +4,8 @@ import axios from "axios";
 interface playerState {
   isPlaying: boolean;
   index: number | null;
-  currentTrackId: number;
-  currentTrackAlbumId: number;
+  currentTrackId: number | string;
+  currentTrackAlbumId: number | string;
   currentTrackCover: string;
   currentTrackTitle: string;
   currentTrackArtists: [];
@@ -32,7 +32,7 @@ export const fetchTrackUrl = createAsyncThunk(
 
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/get-mp3-link/id=${id}/username=${userData.username}/password=${userData.password}`
+      `http://localhost:3002/get-mp3-link/id=${id}/uid=${userData.uid}/token=${userData.token}`
     );
     console.log(data);
     return { url: data.url, info: data.info[0] };
@@ -49,10 +49,10 @@ const currentTrack = createSlice({
     setIndex(state, action: PayloadAction<number>) {
       state.index = action.payload;
     },
-    setCurrentTrackId(state, action: PayloadAction<number>) {
+    setCurrentTrackId(state, action: PayloadAction<number | string>) {
       state.currentTrackId = action.payload;
     },
-    setCurrentTrackAlbum(state, action: PayloadAction<number>) {
+    setCurrentTrackAlbum(state, action: PayloadAction<number | string>) {
       state.currentTrackAlbumId = action.payload;
     },
     setTrackStatus(

@@ -9,18 +9,19 @@ const Header: FC<{}> = () => {
     sessionStorage.removeItem("user-playlists");
     window.location.reload();
   };
+  const userData = JSON.parse(localStorage.getItem("user-data") || "");
   return (
-    <div className={styles.header}>
+    <nav className={styles.header}>
       <div className={styles.contentContainer}>
         <ul className={styles.optionsList}>
           <li>
-            <Link to="/playlists">Плейлисты</Link>
+            <Link to={`users/${userData.uid}/playlists/`}>Плейлисты</Link>
           </li>
           <li>
-            <Link to="/albums">Альбомы</Link>
+            <Link to={`users/${userData.uid}/albums`}>Альбомы</Link>
           </li>
           <li>
-            <Link to="/podcasts">Подкасты и Книги</Link>
+            <Link to={`users/${userData.uid}/podcasts`}>Подкасты и Книги</Link>
           </li>
         </ul>
         <div className={styles.exitButtonContainer}>
@@ -32,7 +33,7 @@ const Header: FC<{}> = () => {
           </IconContext.Provider>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -5,7 +5,7 @@ export const addTracksToFavorite = async (
 ) => {
   const userData = JSON.parse(localStorage.getItem("user-data") || "");
   await axios.post(
-    `http://localhost:3002/tracks/favorite/add-multiple/username=${userData.username}/password=${userData.password}/track-ids=${trackId}:${albumId}`,
+    `http://localhost:3002/tracks/favorite/add-multiple/uid=${userData.uid}/token=${userData.token}/track-ids=${trackId}:${albumId}`,
     `${trackId}:${albumId}`
   );
 };
