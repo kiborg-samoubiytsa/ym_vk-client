@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import setPlayerVisible from "./reducers/playerSlice";
 import currentTrack from "./reducers/currentTrackSlice";
-import { playlistSlice } from "./reducers/selectedCollectionSlice";
+import { playlistSlice } from "./reducers/selectedItemSlice";
 import { currentQueueSlice } from "./reducers/currentQueueSlice";
 import { rotorSliceReducer } from "./reducers/rotorSlice";
 import favoriteTracksSliceReducer from "./reducers/favoriteTracksSlice";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styles from "./CurrentQueue.module.scss";
+import "./CurrentQueue.scss";
 import { useSelector } from "react-redux";
 import {
   currentQueue as queue,
@@ -18,23 +18,16 @@ const CurrentQueuePage: FC<Props> = ({ setIsQueueDisplayed }) => {
   const currentQueue = useSelector(queue);
   const queueType = useSelector(type);
   return (
-    <div className={styles.currentQueue}>
+    <div className={"currentQueue"}>
       <QueueInfo
-        styles={styles}
         queueInfo={currentQueue}
         setIsQueueDisplayed={setIsQueueDisplayed}
       />
-      <div className={styles.playlist}>
+      <div className="playlist">
         {queueType == "playlist" ? (
-          <PlaylistQueue
-            currentQueue={currentQueue as Required<IPlaylist>}
-            styles={styles}
-          />
+          <PlaylistQueue currentQueue={currentQueue as Required<IPlaylist>} />
         ) : queueType == "album" ? (
-          <AlbumQueue
-            currentQueue={currentQueue as AlbumWithTracks}
-            styles={styles}
-          />
+          <AlbumQueue currentQueue={currentQueue as AlbumWithTracks} />
         ) : (
           <></>
         )}

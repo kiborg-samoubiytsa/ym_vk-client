@@ -1,9 +1,10 @@
 import { FC, useEffect } from "react";
 import { AlbumWithTracks } from "../../../types/types";
-import styles from "./Sidebar.module.scss";
+import "../Sidebar.scss";
+import trackStyles from "../../Track/SidebarTrack.module.scss";
 import Track from "../../Track/Track";
 import { concatArtistNames } from "../../../helpers/concatArtistNames";
-import CloseButton from "./CloseButton";
+import CloseButton from "../CloseButton";
 
 interface Props {
   album: AlbumWithTracks;
@@ -17,16 +18,16 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
   }, []);
 
   return (
-    <div className={styles.infoContainer}>
-      <div className={styles.playlist}>
-        <span className={styles.playlistTitle}>{album.title}</span>
-        <div className={styles.playlistOwner}>
-          <span className={styles.defaultText}>Исполнитель: </span>
+    <div>
+      <div className="playlist">
+        <span className="sidebar_collection_title">{album.title}</span>
+        <div className="playlistOwner">
+          <span className="defaultText">Исполнитель: </span>
           {concatArtistNames(album.artists)}
         </div>
       </div>
       {volumes.map((volume, i) => (
-        <div className={styles.tracks} key={i}>
+        <div className="sidebar_tracks" key={i}>
           {volume.map((track, index) =>
             track.availableForPremiumUsers ? ( //displays track only if its available
               <Track
@@ -35,7 +36,7 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
                 index={index}
                 key={index}
                 duration={track.durationMs}
-                styles={styles}
+                styles={trackStyles}
                 collection={album}
                 albumId={album.id}
               ></Track>
@@ -45,7 +46,7 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
           )}
         </div>
       ))}
-      <CloseButton styles={styles} />
+      <CloseButton />
     </div>
   );
 };

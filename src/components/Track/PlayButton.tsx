@@ -22,7 +22,7 @@ import {
   setCurrentQueue,
   setQueueType,
 } from "../../store/reducers/currentQueueSlice";
-import { collectionType as selectedCollectionType } from "../../store/reducers/selectedCollectionSlice";
+import { collectionType as selectedCollectionType } from "../../store/reducers/selectedItemSlice";
 
 interface Props {
   collectionInfo?: IPlaylist | AlbumWithTracks;

@@ -6,10 +6,10 @@ import {
   status as loadingStatus,
   selectedCollection,
   fetchAlbum,
-  setIsSelected,
-} from "../../store/reducers/selectedCollectionSlice";
+  setIsCollectionSelected,
+} from "../../store/reducers/selectedItemSlice";
 import { AppDispatch } from "../../store/store";
-import { CoverPlayButton } from "../CoverPlayButton";
+import { CoverPlayButton } from "./CoverPlayButton";
 
 interface Props {
   albumInfo: Album;
@@ -26,7 +26,7 @@ export const AlbumCover: FC<Props> = ({ albumInfo }) => {
       collectionStatus == "idle"
     ) {
       dispatch(fetchAlbum({ albumId: albumInfo.id }));
-      dispatch(setIsSelected(true));
+      dispatch(setIsCollectionSelected(true));
     }
   };
 

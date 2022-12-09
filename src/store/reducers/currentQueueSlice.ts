@@ -15,7 +15,7 @@ interface tracksState {
 const initialState: tracksState = {
   status: "idle",
   tracksUrl: [],
-  currentQueue: { kind: 0 } as Required<IPlaylist> | AlbumWithTracks,
+  currentQueue: {} as Required<IPlaylist> | AlbumWithTracks,
   error: undefined,
   isDisplayed: false,
   type: "not-selected",

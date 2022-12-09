@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import "./App.scss";
+import "../_global.scss";
 import Player from "./YMPlayer/Player";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
@@ -20,7 +21,6 @@ const App: FC = () => {
   //TODO менять текущий плейлист только по нажатию на трек
   const { playlistId } = useParams();
   const [isQueueDisplayed, setIsQueueDisplayed] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("user-data") || "");
   return (
     <>
       <Provider store={store}>
@@ -56,10 +56,12 @@ const App: FC = () => {
                 </Routes>
               </div>
             )}
-            <Player
-              isQueueDisplayed={isQueueDisplayed}
-              setIsQueueDisplayed={setIsQueueDisplayed}
-            />
+            <div className="Player-Container">
+              <Player
+                isQueueDisplayed={isQueueDisplayed}
+                setIsQueueDisplayed={setIsQueueDisplayed}
+              />
+            </div>
           </Router>
         ) : (
           <Auth />

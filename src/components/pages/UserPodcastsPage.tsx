@@ -1,12 +1,12 @@
 import React from "react";
 import { UserPodcasts } from "../UserPages/UserPodcasts";
-import { TracksSidebar } from "../Sidebar/TrackQueueSidebar/TracksSidebar";
+import { Sidebar } from "../Sidebar/Sidebar";
 
 export const UserPodcastsPage = () => {
   return (
     <div className="User-Collection">
       <UserPodcasts />
-      <TracksSidebar />
+      <Sidebar />
     </div>
   );
 };

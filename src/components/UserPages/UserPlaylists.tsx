@@ -8,7 +8,7 @@ import {
 import { AppDispatch } from "../../store/store";
 import { IPlaylist } from "../../types/types";
 import { PlaylistCover } from "../CollectionCovers/PlaylistCover";
-import styles from "./Collection.module.scss";
+import "./Collection.scss";
 
 export const UserPlaylists: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,9 +34,9 @@ export const UserPlaylists: FC = () => {
 
   return (
     <>
-      <div className={styles.userCollectionContainer}>
-        <span className={styles.collectionInfo}>Плейлисты</span>
-        <div className={styles.userCollection}>
+      <div className="userCollectionContainer">
+        <span className="collectionInfo">Плейлисты</span>
+        <div className="userCollection">
           {!error ? (
             sessionStoragePlaylists.length > 0 ? (
               sessionStoragePlaylists?.map(

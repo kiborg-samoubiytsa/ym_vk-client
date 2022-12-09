@@ -49,7 +49,7 @@ import { sendRotorFeedBack } from "../../requests/rotorFeedback";
 import { RotorSettings } from "./RotorSettings";
 import { PlayerLikeButton } from "./PlayerLikeButton";
 import { queueType as type } from "../../store/reducers/currentQueueSlice";
-import { setSelectedCollectionType } from "../../store/reducers/selectedCollectionSlice";
+import { setSelectedCollectionType } from "../../store/reducers/selectedItemSlice";
 
 interface Props {
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -323,7 +323,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   setTimeout(() => {
     setCurrentDuration(audioRef.current?.currentTime || 0);
     audioTimeRef.current = audioRef.current?.currentTime || 0;
-  }, 10);
+  }, 50);
 
   const handleTimeChange = () => {
     setTimeout(() => {

@@ -3,7 +3,7 @@ import useFetch from "../../hooks/useFetch";
 import { FC, useEffect } from "react";
 import { Album } from "../../types/types";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./Collection.module.scss";
+import "./Collection.scss";
 import {
   favoriteTrackIds,
   fetchFavoriteTracks,
@@ -32,9 +32,9 @@ export const UserAlbums: FC = () => {
     }
   }, [data]);
   return (
-    <div className={styles.userCollectionContainer}>
-      <span className={styles.collectionInfo}>Альбомы</span>
-      <div className={styles.userCollection}>
+    <div className="userCollectionContainer">
+      <span className="collectionInfo">Альбомы</span>
+      <div className="userCollection">
         {!error ? (
           sessionStorageAlbums.length != 0 ? (
             sessionStorageAlbums.map((album: Album, index: number) =>

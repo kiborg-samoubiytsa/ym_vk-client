@@ -5,7 +5,7 @@ import { AppDispatch } from "../../store/store";
 import { favoriteTrackIds } from "../../store/reducers/favoriteTracksSlice";
 import { Album } from "../../types/types";
 import { fetchFavoriteTracks } from "../../store/reducers/favoriteTracksSlice";
-import styles from "./Collection.module.scss";
+import "./Collection.scss";
 import { AlbumCover } from "../CollectionCovers/AlbumCover";
 
 export const UserPodcasts: FC = () => {
@@ -30,9 +30,9 @@ export const UserPodcasts: FC = () => {
     }
   }, [data]);
   return (
-    <div className={styles.userCollectionContainer}>
-      <span className={styles.collectionInfo}>Аудиокниги и Подкасты</span>
-      <div className={styles.userCollection}>
+    <div className="userCollectionContainer">
+      <span className="collectionInfo">Аудиокниги и Подкасты</span>
+      <div className="userCollection">
         {!error ? (
           sessionStoragePodcasts.length == 0 ? (
             data?.map((album: Album, index) =>

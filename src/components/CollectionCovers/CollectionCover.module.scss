@@ -27,6 +27,7 @@
 }
 .cover {
   margin-bottom: 10px;
+
   background-color: transparent;
   .coverPlayButtonContainer {
     display: none;
@@ -36,6 +37,9 @@
   }
 }
 .coverContainer:hover {
+  transition: 0.3s;
+  transform: translateX(10px) translateY(5px);
+  box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.8);
   border: #6633cc solid 2px;
   .coverPlayButtonContainer {
     cursor: pointer;

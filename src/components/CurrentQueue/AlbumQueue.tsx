@@ -2,15 +2,15 @@ import { FC } from "react";
 import { AlbumWithTracks } from "../../types/types";
 import Track from "../Track/Track";
 import { Track as ITrack } from "../../types/types";
+import trackStyles from "../Track/SidebarTrack.module.scss";
 
 interface Props {
   currentQueue: AlbumWithTracks;
-  styles: any;
 }
 
-export const AlbumQueue: FC<Props> = ({ currentQueue, styles }) => {
+export const AlbumQueue: FC<Props> = ({ currentQueue }) => {
   return (
-    <div className={styles.tracks}>
+    <div className="tracks">
       {currentQueue.volumes
         .flat()
         .map((track: ITrack, index: number) =>
@@ -24,7 +24,7 @@ export const AlbumQueue: FC<Props> = ({ currentQueue, styles }) => {
               key={index}
               artists={track.artists}
               duration={track.durationMs}
-              styles={styles}
+              styles={trackStyles}
               albumId={track.albums[0].id}
             ></Track>
           ) : (

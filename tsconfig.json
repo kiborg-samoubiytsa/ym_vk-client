@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/store/reducers/.ts"]
+  "include": ["src", "src/store/reducers/.ts", "server/server.js"]
 }

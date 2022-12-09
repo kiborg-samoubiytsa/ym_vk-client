@@ -48,7 +48,7 @@ export const Auth = () => {
           />
           <span className={styles.authFieldName}>Пароль:</span>
           <input
-            type="text"
+            type="password"
             className={styles.authFormField}
             placeholder="Пароль"
             ref={passwordInputRef}

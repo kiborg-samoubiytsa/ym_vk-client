@@ -1,8 +1,9 @@
 import { FC, useEffect } from "react";
 import { IPlaylist, PlaylistTrack } from "../../../types/types";
 import Track from "../../Track/Track";
-import styles from "./Sidebar.module.scss";
-import CloseButton from "./CloseButton";
+import "../Sidebar.scss";
+import trackStyles from "../../Track/SidebarTrack.module.scss";
+import CloseButton from "../CloseButton";
 
 interface Props {
   playlist: IPlaylist;
@@ -20,21 +21,21 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
   }, []);
 
   return (
-    <div className={styles.infoContainer}>
-      <div className={styles.playlist}>
-        <span className={styles.playlistTitle}>
+    <div>
+      <div className="playlist">
+        <span className="sidebar_collection_title">
           {
             playlist.kind != 3
               ? playlist.title
               : "Мне нравится" /* kind 3 is user's favourites*/
           }
         </span>
-        <div className={styles.playlistOwner}>
-          <span className={styles.defaultText}>Автор: </span>
+        <div className="playlistOwner">
+          <span className="defaultText">Автор: </span>
           {playlist.owner.name}
         </div>
       </div>
-      <div className={styles.tracks}>
+      <div className="sidebar_tracks">
         {tracks!.map(
           (
             track: PlaylistTrack,
@@ -49,7 +50,7 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
                 key={index}
                 artists={artists[index]}
                 duration={track.track.durationMs}
-                styles={styles}
+                styles={trackStyles}
                 albumId={track.track.albums[0].id}
               ></Track>
             ) : (
@@ -57,7 +58,7 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
             )
         )}
       </div>
-      <CloseButton styles={styles} />
+      <CloseButton />
     </div>
   );
 };

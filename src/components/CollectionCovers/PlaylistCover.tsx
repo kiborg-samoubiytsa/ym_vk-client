@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import {
   fetchPlaylist,
-  setIsSelected,
+  setIsCollectionSelected,
   status as playlistStatus,
   selectedCollection as source,
-} from "../../store/reducers/selectedCollectionSlice";
-import { CoverPlayButton } from "../CoverPlayButton";
+} from "../../store/reducers/selectedItemSlice";
+import { CoverPlayButton } from "./CoverPlayButton";
 import { Link } from "react-router-dom";
+import { covers } from "../../img/coverStocks/allDefaultCovers";
 
 interface Props {
   playlistInfo: IPlaylist | undefined;
@@ -33,7 +34,7 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
           kind: playlistInfo?.kind,
         })
       );
-      dispatch(setIsSelected(true));
+      dispatch(setIsCollectionSelected(true));
     }
     return;
   };
@@ -73,10 +74,7 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
               alt="cover"
             ></img>
           ) : (
-            <img
-              src={`https://${playlistInfo?.ogImage.replace("%%", "200x200")}`}
-              alt="cover"
-            ></img>
+            <img src={covers[Math.floor(Math.random() * 4)]} alt="cover"></img>
           )}
         </>
       </div>

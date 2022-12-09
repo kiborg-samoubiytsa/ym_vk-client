@@ -1,5 +1,31 @@
 .content {
-  width: 80%;
+  width: 50vw;
   background-color: white;
   justify-content: center;
+  overflow-y: scroll;
+  height: calc(100vh - 128px);
+  margin-bottom: 400px;
+  .playlistSupplement {
+    display: flex;
+    .playlistCover {
+      width: 200px;
+      height: 200px;
+      align-self: flex-start;
+    }
+    .playlistInfo {
+      margin-top: 15px;
+      margin-left: 15px;
+      display: flex;
+      flex-direction: column;
+      .playlistTitle {
+        color: #222;
+        font-size: 36px;
+        font-family: "Clear Sans", sans-serif;
+      }
+      .ownerName {
+        font-size: 16px;
+        font-family: "Source Sans Pro", sans-serif;
+      }
+    }
+  }
 }
