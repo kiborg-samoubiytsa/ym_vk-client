@@ -36,11 +36,27 @@ export const UserPodcasts: FC = () => {
         {!error ? (
           sessionStoragePodcasts.length == 0 ? (
             data?.map((album: Album, index) =>
-              album ? <AlbumCover key={index} albumInfo={album} /> : <></>
+              album ? (
+                <AlbumCover
+                  key={index}
+                  albumInfo={album}
+                  metadata="web-own_podcasts-album-track-fridge"
+                />
+              ) : (
+                <></>
+              )
             )
           ) : (
             sessionStoragePodcasts.map((album: Album, index: number) =>
-              album ? <AlbumCover key={index} albumInfo={album} /> : <></>
+              album ? (
+                <AlbumCover
+                  key={index}
+                  albumInfo={album}
+                  metadata="web-own_podcasts-album-track-fridge"
+                />
+              ) : (
+                <></>
+              )
             )
           )
         ) : (

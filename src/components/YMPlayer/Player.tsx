@@ -23,6 +23,7 @@ import {
   IPlaylist,
   AlbumWithTracks,
   Track,
+  SimilarTracks,
 } from "../../types/types";
 import {
   selectIsPlaying,
@@ -49,7 +50,12 @@ import { sendRotorFeedBack } from "../../requests/rotorFeedback";
 import { RotorSettings } from "./RotorSettings";
 import { PlayerLikeButton } from "./PlayerLikeButton";
 import { queueType as type } from "../../store/reducers/currentQueueSlice";
-import { setSelectedCollectionType } from "../../store/reducers/selectedItemSlice";
+import {
+  selectedItemMeta,
+  setItemMetadata,
+  setSelectedItemType,
+} from "../../store/reducers/selectedItemSlice";
+import { useCurrentTrack } from "../../hooks/useCurrentTrackInfo";
 
 interface Props {
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
@@ -81,13 +87,11 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   const timeRangeRef = useRef<HTMLInputElement>(null);
   const volumeRangeRef = useRef<HTMLInputElement>(null);
   const isQueuePresent = useRef<boolean>(false);
-  const fromRef = useRef<string>("");
   const playIdRef = useRef<string>(generatePlayId());
 
   //useSelectors
 
   const isPlayerVisible = useSelector(isVisible);
-
   const sourceQueue = useSelector(
     (state: RootState) => state.currentQueueSlice.currentQueue
   );
@@ -103,20 +107,20 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
       ? (sourceQueue as IPlaylist).tracks
       : queueType == "album"
       ? (sourceQueue as AlbumWithTracks).volumes?.flat()
+      : queueType == "similar-tracks"
+      ? (sourceQueue as SimilarTracks).similarTracks
       : [];
 
-  const playlistLoadingStatus = useSelector(
-    (state: RootState) => state.currentQueueSlice.status
-  );
   const trackLoadingStatus = useSelector(
     (state: RootState) => state.currentTrack.status
   );
   const rotorQueue = useSelector(
-    (state: RootState) => state.rotorSliceReducer.currentQueue
+    (state: RootState) => state.rotorSliceReducer.rotorQueue
   );
   const isRadioMode = useSelector(
-    (state: RootState) => state.setPlayerVisible.isInRadioMode
+    (state: RootState) => state.playerSlice.isInRadioMode
   );
+  const metadata = useSelector(selectedItemMeta);
 
   const currentTrackId = useSelector(
     (state: RootState) => state.currentTrack.currentTrackId
@@ -138,68 +142,48 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   const trackIdArray = tracksArray?.map((track) => {
     return track.id;
   });
+
+  useCurrentTrack();
+
   useEffect(() => {
-    //starts playing track if its index is different
-    console.log(isRadioMode);
-    if (
-      isQueuePresent.current &&
-      playlistLoadingStatus == "succeeded" &&
-      !isRadioMode
-    ) {
-      fromRef.current = sourceQueue.metadata;
-    }
-    if (isQueuePresent.current && isRadioMode && rotorQueue) {
-      fromRef.current = "web-radio-playlist-autoflow";
-    }
-    playIdRef.current = generatePlayId();
     if (trackLoadingStatus == "succeeded") {
       handleStartPlaying();
-
-      if (!isRadioMode && queueType == "playlist") {
-        dispatch(setCurrentTrackId(tracksArray![index || 0].id));
-        dispatch(
-          setCurrentTrackAlbum(
-            (tracksArray as PlaylistTrack[])![index || 0].track.albums[0].id
-          )
-        );
-      } else if (!isRadioMode && queueType == "album") {
-        dispatch(setCurrentTrackId(tracksArray![index || 0].id));
-        dispatch(setCurrentTrackAlbum((sourceQueue as AlbumWithTracks).id));
-      } else {
-        dispatch(setCurrentTrackId(radioIdArray[index || 0]));
-        dispatch(
-          setCurrentTrackAlbum(rotorQueue![index || 0].track.albums[0].id)
-        );
-      }
     }
-  }, [index, trackLoadingStatus, queueType]);
+  }, [index, trackLoadingStatus]);
 
   useEffect(() => {
     return () => {
       if (isQueuePresent.current) {
-        if (!isRadioMode && queueType == "playlist") {
+        if (!isRadioMode && queueType == "playlist" && tracksArray) {
           endAudioRequest(
-            (sourceQueue as Required<IPlaylist>).tracks[index || 0].track,
+            (tracksArray as PlaylistTrack[])[index || 0].track,
             audioTimeRef.current,
             playIdRef.current,
-            fromRef.current,
+            metadata,
+            (tracksArray as PlaylistTrack[])[index || 0].track.albums[0],
             sourceQueue as IPlaylist
           );
         }
-        if (!isRadioMode && queueType == "album") {
+        if (
+          !isRadioMode &&
+          (queueType == "album" || queueType == "similar-tracks") &&
+          tracksArray
+        ) {
           endAudioRequest(
             (tracksArray as Track[])[index || 0],
             audioTimeRef.current,
             playIdRef.current,
-            fromRef.current
+            metadata,
+            sourceQueue as AlbumWithTracks
           );
         }
-        if (isRadioMode) {
+        if (isRadioMode && rotorQueue) {
           endAudioRequest(
-            rotorQueue![index || 0].track,
+            rotorQueue[index || 0].track,
             audioTimeRef.current,
             playIdRef.current,
-            fromRef.current
+            metadata,
+            rotorQueue[index || 0].track.albums[0]
           );
         }
       }
@@ -243,7 +227,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
         await startAudioRequest(
           (tracksArray as PlaylistTrack[])[index || 0].track,
           playIdRef.current,
-          fromRef.current,
+          metadata,
           sourceQueue as IPlaylist
         );
       }, 200);
@@ -253,7 +237,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
         await startAudioRequest(
           (tracksArray as Track[])![index || 0],
           playIdRef.current,
-          fromRef.current
+          metadata
         );
       }, 200);
     }
@@ -262,7 +246,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
         await startAudioRequest(
           rotorQueue![index || 0].track,
           playIdRef.current,
-          fromRef.current
+          metadata
         );
       });
       dispatch(setCurrentTrackId(radioIdArray[index || 0]));
@@ -270,7 +254,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
     if (isRadioMode) {
       sendRotorFeedBack(
         "trackStarted",
-        fromRef.current,
+        metadata,
         `${rotorQueue![index || 0].track.id}:${
           rotorQueue![index || 0].track.albums[0].id
         }`,
@@ -386,8 +370,8 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
   }, [index, isRadioMode]);
 
   useEffect(() => {
-    if (!isRadioMode && (index || index == 0)) {
-      dispatch(fetchTrackUrl(trackIdArray![index].toString()));
+    if (!isRadioMode && (index || index == 0) && trackIdArray) {
+      dispatch(fetchTrackUrl(trackIdArray[index]?.toString()));
     }
     if (isRadioMode && (index || index == 0) && radioIdArray) {
       dispatch(fetchTrackUrl(radioIdArray![index]));
@@ -397,7 +381,7 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
       if (isRadioMode) {
         sendRotorFeedBack(
           radioTrackEndReason.current,
-          fromRef.current,
+          metadata,
           `${rotorQueue![index || 0].track.id}:${
             rotorQueue![index || 0].track.albums[0].id
           }`,
@@ -544,38 +528,29 @@ const Player: FC<Props> = ({ setIsQueueDisplayed, isQueueDisplayed }) => {
                   className={styles.controlButton}
                   onClick={() =>
                     isQueueDisplayed
-                      ? (dispatch(setSelectedCollectionType("not-selected")),
+                      ? (dispatch(setSelectedItemType("not-selected")),
                         setIsQueueDisplayed(false))
-                      : (dispatch(setSelectedCollectionType(queueType)),
+                      : (dispatch(setSelectedItemType(queueType)),
                         setIsQueueDisplayed(true))
                   }
                 />
               </IconContext.Provider>
-              <div className={styles.trackInfoContainer}>
-                {trackLoadingStatus == "succeeded" ||
-                trackLoadingStatus == "playing" ? (
-                  <>
-                    <img
-                      src={cover}
-                      alt={title}
-                      className={styles.trackCover}
-                    />
+              {trackLoadingStatus == "succeeded" ||
+              trackLoadingStatus == "playing" ? (
+                <div className={styles.trackInfoContainer}>
+                  <img src={cover} alt={title} className={styles.trackCover} />
 
-                    <div className={styles.trackInfo}>
-                      <span className={styles.title}>{title}</span>
-                      <span className={styles.artists}>
-                        {concatArtistNames(artists)}
-                      </span>
-                    </div>
-                    <PlayerLikeButton
-                      isRadioMode={isRadioMode}
-                      from={fromRef.current}
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
-              </div>
+                  <div className={styles.trackInfo}>
+                    <span className={styles.title}>{title}</span>
+                    <span className={styles.artists}>
+                      {concatArtistNames(artists)}
+                    </span>
+                  </div>
+                  <PlayerLikeButton isRadioMode={isRadioMode} from={metadata} />
+                </div>
+              ) : (
+                <></>
+              )}
               <div className={styles.volumeControlsContainer}>
                 <div className={styles.volumeIconContainer}>
                   <IconContext.Provider value={{ size: "36" }}>

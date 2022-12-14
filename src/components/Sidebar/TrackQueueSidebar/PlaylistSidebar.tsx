@@ -23,14 +23,14 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
   return (
     <div>
       <div className="playlist">
-        <span className="sidebar_collection_title">
+        <span className="sidebar_collectionTitle">
           {
             playlist.kind != 3
               ? playlist.title
               : "Мне нравится" /* kind 3 is user's favourites*/
           }
         </span>
-        <div className="playlistOwner">
+        <div className="sidebar_collectionOwner">
           <span className="defaultText">Автор: </span>
           {playlist.owner.name}
         </div>
@@ -54,7 +54,7 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
                 albumId={track.track.albums[0].id}
               ></Track>
             ) : (
-              <></>
+              <div key={index}></div>
             )
         )}
       </div>

@@ -6,7 +6,7 @@ import { IRotorTrack, RotorSettings2 } from "../../types/types";
 import { RootState } from "../store";
 
 interface IRotor {
-  currentQueue: IRotorTrack[];
+  rotorQueue: IRotorTrack[];
   queueStatus: "idle" | "loading" | "succeeded" | "failed";
   currentStation: string;
   rotorSettings: RotorSettings2;
@@ -23,7 +23,7 @@ interface IRotor {
   };
 }
 const initialState: IRotor = {
-  currentQueue: [],
+  rotorQueue: [],
   queueStatus: "idle",
   currentStation: "user:onyourwave",
   rotorSettings: {
@@ -81,7 +81,7 @@ export const rotorSlice = createSlice({
       })
       .addCase(fetchRotorQueue.fulfilled, (state, action) => {
         state.queueStatus = "succeeded";
-        state.currentQueue = action.payload;
+        state.rotorQueue = action.payload;
       })
       .addCase(fetchRotorQueue.rejected, (state, action) => {
         state.queueStatus = "failed";
@@ -214,6 +214,8 @@ export const rotorSlice = createSlice({
 });
 export const { setSettingsStyles, setSelectorTitles, setSettingsValues } =
   rotorSlice.actions;
+export const rotorQueue = (state: RootState) =>
+  state.rotorSliceReducer.rotorQueue;
 export const currentStation = (state: RootState) =>
   state.rotorSliceReducer.currentStation;
 export const rotorSettings = (state: RootState) =>

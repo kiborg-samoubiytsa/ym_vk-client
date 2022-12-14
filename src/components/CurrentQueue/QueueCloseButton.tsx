@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useDispatch } from "react-redux";
-import { setSelectedCollectionType } from "../../store/reducers/selectedItemSlice";
+import { setSelectedItemType } from "../../store/reducers/selectedItemSlice";
 import { IconContext } from "react-icons";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -11,7 +11,7 @@ interface Props {
 export const CloseButton: FC<Props> = ({ setIsQueueDisplayed }) => {
   const dispatch = useDispatch();
   const hideCurrentQueue = () => {
-    dispatch(setSelectedCollectionType("not-selected"));
+    dispatch(setSelectedItemType("not-selected"));
     setIsQueueDisplayed(false);
   };
   return (

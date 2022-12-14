@@ -7,15 +7,17 @@ import {
   selectedCollection,
   fetchAlbum,
   setIsCollectionSelected,
+  setItemMetadata,
 } from "../../store/reducers/selectedItemSlice";
 import { AppDispatch } from "../../store/store";
 import { CoverPlayButton } from "./CoverPlayButton";
 
 interface Props {
   albumInfo: Album;
+  metadata: string;
 }
 
-export const AlbumCover: FC<Props> = ({ albumInfo }) => {
+export const AlbumCover: FC<Props> = ({ albumInfo, metadata }) => {
   const dispatch = useDispatch<AppDispatch>();
   const collectionStatus = useSelector(loadingStatus);
   const selectedAlbum = useSelector(selectedCollection);
@@ -27,6 +29,7 @@ export const AlbumCover: FC<Props> = ({ albumInfo }) => {
     ) {
       dispatch(fetchAlbum({ albumId: albumInfo.id }));
       dispatch(setIsCollectionSelected(true));
+      dispatch(setItemMetadata(metadata));
     }
   };
 

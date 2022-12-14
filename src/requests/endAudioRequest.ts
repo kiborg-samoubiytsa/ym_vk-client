@@ -6,6 +6,7 @@ export const endAudioRequest = async (
   secondsPlayed: number,
   playId: string,
   metadata: string,
+  album: Album,
   playlist?: IPlaylist
 ) => {
   const totalSeconds = track.durationMs / 1000;
@@ -13,7 +14,7 @@ export const endAudioRequest = async (
     await playAudio({
       from: metadata || "web-own_playlists-playlist-track-fridge",
       "track-id": track.id,
-      "album-id": track.albums[0].id ? track.albums[0].id : undefined,
+      "album-id": album.id,
       "play-id": playId,
       "track-length-seconds": totalSeconds,
       "total-played-seconds": secondsPlayed,
@@ -24,7 +25,7 @@ export const endAudioRequest = async (
     await playAudio({
       from: metadata || "web-own_playlists-playlist-track-fridge",
       "track-id": track.id,
-      "album-id": track.albums[0].id,
+      "album-id": album.id,
       "play-id": playId,
       "track-length-seconds": totalSeconds,
       "total-played-seconds": secondsPlayed,

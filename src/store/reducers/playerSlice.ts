@@ -22,7 +22,8 @@ const togglePlayer = createSlice({
 });
 
 export const isPlayerVisible = (state: RootState) =>
-  state.setPlayerVisible.isVisible;
-
+  state.playerSlice.isVisible;
+export const isInRadioMode = (state: RootState) =>
+  state.playerSlice.isInRadioMode;
 export const { setPlayerVisible, setIsRadioMode } = togglePlayer.actions;
 export default togglePlayer.reducer;

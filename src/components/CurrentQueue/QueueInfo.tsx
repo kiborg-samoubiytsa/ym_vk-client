@@ -1,10 +1,15 @@
 import { FC } from "react";
-import { AlbumWithTracks, IPlaylist } from "../../types/types";
+import {
+  Album,
+  AlbumWithTracks,
+  IPlaylist,
+  SimilarTracks,
+} from "../../types/types";
 import { useSelector } from "react-redux";
 import { queueType as type } from "../../store/reducers/currentQueueSlice";
 import { CloseButton } from "./QueueCloseButton";
 interface Props {
-  queueInfo: AlbumWithTracks | IPlaylist;
+  queueInfo: AlbumWithTracks | IPlaylist | SimilarTracks;
   setIsQueueDisplayed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const QueueInfo: FC<Props> = ({ queueInfo, setIsQueueDisplayed }) => {
@@ -20,10 +25,12 @@ export const QueueInfo: FC<Props> = ({ queueInfo, setIsQueueDisplayed }) => {
               (queueInfo as IPlaylist).kind == 3 ? (
                 "Мне нравится"
               ) : (
-                queueInfo.title
+                (queueInfo as IPlaylist).title
               )
             ) : queueType == "album" ? (
-              queueInfo.title
+              (queueInfo as Album).title
+            ) : queueType == "similar-tracks" ? (
+              `Треки, похожие на (queueInfo as SimilarTracks).track.`
             ) : (
               <></>
             )}

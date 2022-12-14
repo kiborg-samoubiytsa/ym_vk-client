@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import setPlayerVisible from "./reducers/playerSlice";
+import playerSlice from "./reducers/playerSlice";
 import currentTrack from "./reducers/currentTrackSlice";
 import { playlistSlice } from "./reducers/selectedItemSlice";
 import { currentQueueSlice } from "./reducers/currentQueueSlice";
@@ -8,7 +8,7 @@ import favoriteTracksSliceReducer from "./reducers/favoriteTracksSlice";
 
 export const store = configureStore({
   reducer: {
-    setPlayerVisible,
+    playerSlice,
     currentTrack,
     playlistSlice,
     currentQueueSlice,

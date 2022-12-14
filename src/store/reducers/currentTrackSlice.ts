@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import axios from "axios";
 interface playerState {
   isPlaying: boolean;
+  playId: string;
   index: number | null;
   currentTrackId: number | string;
   currentTrackAlbumId: number | string;
@@ -10,11 +11,14 @@ interface playerState {
   currentTrackTitle: string;
   currentTrackArtists: [];
   currentTrackUrl: string;
+  metadata: string;
   status: "idle" | "loading" | "succeeded" | "failed" | "playing";
 }
 
 const initialState: playerState = {
   isPlaying: false,
+  playId: "",
+  metadata: "",
   index: null,
   currentTrackId: 0,
   currentTrackAlbumId: 0,
@@ -55,13 +59,14 @@ const currentTrack = createSlice({
     setCurrentTrackAlbum(state, action: PayloadAction<number | string>) {
       state.currentTrackAlbumId = action.payload;
     },
-    setTrackStatus(
-      state,
-      action: PayloadAction<
-        "idle" | "loading" | "succeeded" | "failed" | "playing"
-      >
-    ) {
+    setTrackStatus(state, action: PayloadAction<playerState["status"]>) {
       state.status = action.payload;
+    },
+    setTrackMetadata(state, action: PayloadAction<string>) {
+      state.metadata = action.payload;
+    },
+    setPlayId(state, action: PayloadAction<string>) {
+      state.playId = action.payload;
     },
   },
   extraReducers(builder) {

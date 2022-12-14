@@ -2,7 +2,7 @@ import { FC } from "react";
 import { AlbumWithTracks } from "../../types/types";
 import Track from "../Track/Track";
 import { Track as ITrack } from "../../types/types";
-import trackStyles from "../Track/SidebarTrack.module.scss";
+import trackStyles from "../Track/PageTrack.module.scss";
 
 interface Props {
   currentQueue: AlbumWithTracks;

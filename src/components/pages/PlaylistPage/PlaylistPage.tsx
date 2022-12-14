@@ -2,8 +2,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
-import { setSelectedCollectionType } from "../../../store/reducers/selectedItemSlice";
-import { IPlaylist } from "../../../types/types";
+import {
+  fetchTrackInfo,
+  isTrackSelected,
+  setIsCollectionSelected,
+  setIsTrackSelected,
+  setSelectedItemType,
+} from "../../../store/reducers/selectedItemSlice";
+import { IPlaylist, PlaylistTrack } from "../../../types/types";
 import { Sidebar } from "../../Sidebar/Sidebar";
 import Track from "../../Track/Track";
 import trackStyles from "../../Track/PageTrack.module.scss";
@@ -34,8 +40,14 @@ export const PlaylistPage = () => {
     if (favoriteTracks.length == 0) {
       dispatch(fetchFavoriteTracks());
     }
-    dispatch(setSelectedCollectionType("playlist"));
+    dispatch(setSelectedItemType("playlist"));
   }, []);
+
+  const handleTrackSelect = (track: PlaylistTrack) => {
+    dispatch(fetchTrackInfo({ trackId: track.track.id }));
+    dispatch(setIsTrackSelected(true));
+    dispatch(setIsCollectionSelected(false));
+  };
   return (
     <div className="User-Collection">
       <div className="content">
@@ -67,7 +79,10 @@ export const PlaylistPage = () => {
               alt="cover"
             ></img>
           ) : (
-            <img src={covers[Math.floor(Math.random() * 4)]} alt="cover"></img>
+            <img
+              src={covers[Math.floor(Math.random() * covers.length)]}
+              alt="cover"
+            ></img>
           )}
           <div className="playlistInfo">
             <span className="defaultText">ПЛЕЙЛИСТ</span>
@@ -80,20 +95,27 @@ export const PlaylistPage = () => {
         {collection ? (
           collection.tracks!.map((track, index) =>
             track.track.availableForPremiumUsers ? (
-              <Track
-                id={track.id}
-                title={track.track.title}
-                index={index}
-                duration={track.track.durationMs}
-                artists={track.track.artists}
-                albumId={track.track.albums[0].id}
-                collection={collection as IPlaylist}
-                styles={trackStyles}
-                trackCover={`https://${track.track.ogImage?.replace(
-                  "%%",
-                  "50x50"
-                )}`}
-              />
+              <div
+                onClick={() => {
+                  handleTrackSelect(track);
+                }}
+                className="trackWrapper"
+              >
+                <Track
+                  id={track.id}
+                  title={track.track.title}
+                  index={index}
+                  duration={track.track.durationMs}
+                  artists={track.track.artists}
+                  albumId={track.track.albums[0].id}
+                  collection={collection as IPlaylist}
+                  styles={trackStyles}
+                  trackCover={`https://${track.track.coverUri?.replace(
+                    "%%",
+                    "50x50"
+                  )}`}
+                />
+              </div>
             ) : (
               <></>
             )

@@ -77,7 +77,8 @@
       margin-left: 50px;
       flex-direction: row;
       align-items: center;
-      animation: slide-in 0.3s forwards;
+      animation: slide 0.3s forwards;
+      margin-left: 15px;
       .trackInfo {
         display: flex;
         flex-direction: column;
@@ -188,16 +189,25 @@
       border-top: 9px solid white;
     }
   }
-  @keyframes slide-in {
-    100% {
-      margin-left: 10px;
-    }
+}
+@keyframes slide {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0%);
   }
 }
+
 @media (max-width: 800px) {
   .playerContainer {
     .playerActive {
+      height: 180px;
       min-width: 100vw;
+      .volumeControlsContainer {
+        padding-top: 110px;
+        padding-right: 40px;
+      }
     }
   }
 }

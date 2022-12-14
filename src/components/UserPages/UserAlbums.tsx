@@ -38,11 +38,27 @@ export const UserAlbums: FC = () => {
         {!error ? (
           sessionStorageAlbums.length != 0 ? (
             sessionStorageAlbums.map((album: Album, index: number) =>
-              album ? <AlbumCover key={index} albumInfo={album} /> : <></>
+              album ? (
+                <AlbumCover
+                  key={index}
+                  albumInfo={album}
+                  metadata="web-own_albums-album-track-fridge"
+                />
+              ) : (
+                <></>
+              )
             )
           ) : (
             data?.map((album: Album, index) =>
-              album ? <AlbumCover key={index} albumInfo={album} /> : <></>
+              album ? (
+                <AlbumCover
+                  key={index}
+                  albumInfo={album}
+                  metadata="web-own_albums-album-track-fridge"
+                />
+              ) : (
+                <></>
+              )
             )
           )
         ) : (

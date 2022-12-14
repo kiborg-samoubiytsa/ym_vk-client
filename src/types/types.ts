@@ -414,10 +414,20 @@ type Video = {
   providerVideoId: string;
   embed: string;
 };
-export type GetTrackSupplementResponse = {
+export type TrackSupplement = {
   id: number;
   lyrics: Lirics;
   videos: Array<Video>;
+};
+
+export type SimilarTracks = {
+  track: Track;
+  similarTracks: Track[];
+};
+
+export type FullTrackInfo = {
+  supplement: TrackSupplement;
+  similar: SimilarTracks;
 };
 
 type AudioCodec = "mp3" | "aac" | string;

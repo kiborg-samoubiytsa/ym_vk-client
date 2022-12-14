@@ -41,12 +41,20 @@ export const UserPlaylists: FC = () => {
             sessionStoragePlaylists.length > 0 ? (
               sessionStoragePlaylists?.map(
                 (playlist: IPlaylist, index: number) => (
-                  <PlaylistCover key={index} playlistInfo={playlist} />
+                  <PlaylistCover
+                    key={index}
+                    playlistInfo={playlist}
+                    metadata="web-own_playlists-playlist-track-fridge"
+                  />
                 )
               )
             ) : (
               data?.map((playlist, index) => (
-                <PlaylistCover key={index} playlistInfo={playlist} />
+                <PlaylistCover
+                  key={index}
+                  playlistInfo={playlist}
+                  metadata="web-own_playlists-playlist-track-fridge"
+                />
               ))
             )
           ) : (

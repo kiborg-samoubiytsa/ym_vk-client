@@ -1,7 +1,12 @@
 import { FC } from "react";
 import PlayButton from "./PlayButton";
 import Title from "./Title";
-import { AlbumWithTracks, IArtist, IPlaylist } from "../../types/types";
+import {
+  AlbumWithTracks,
+  IArtist,
+  IPlaylist,
+  SimilarTracks,
+} from "../../types/types";
 import Artist from "./Artist";
 import Duration from "./Duration";
 import { TrackCover } from "./TrackCover";
@@ -21,7 +26,7 @@ interface Props {
   artists?: IArtist[];
   duration: number;
   styles: any;
-  collection: IPlaylist | AlbumWithTracks;
+  collection?: IPlaylist | AlbumWithTracks | SimilarTracks | undefined;
   trackCover?: string;
 }
 

@@ -14,7 +14,7 @@ import {
   trackId,
   isTrackPlaying as isPlaying,
 } from "../../store/reducers/currentTrackSlice";
-import { AlbumWithTracks, IPlaylist } from "../../types/types";
+import { AlbumWithTracks, IPlaylist, SimilarTracks } from "../../types/types";
 import {
   currentQueue,
   isVisible,
@@ -25,7 +25,7 @@ import {
 import { collectionType as selectedCollectionType } from "../../store/reducers/selectedItemSlice";
 
 interface Props {
-  collectionInfo?: IPlaylist | AlbumWithTracks;
+  collectionInfo?: IPlaylist | AlbumWithTracks | SimilarTracks;
   index: number;
   styles: any;
   id: string | number;
@@ -43,9 +43,10 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
   const isPlayerVisible = useSelector(isVisible);
   const isTrackPlaying = useSelector(isPlaying);
 
-  const handlePlay = () => {
+  const handlePlay = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     //если выбран альбом, а играет трек из плейлиста и нажимается кнопка в текущей очереди, то пиздец
     //TODO пофиксить это
+    e.stopPropagation();
     if (!isPlayerVisible) {
       dispatch(setPlayerVisible(true));
     }
@@ -88,8 +89,17 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
       dispatch(setQueueType("playlist"));
     }
     if (
+      sourceType != collectionType &&
+      (collectionType == "track" || collectionType == "similar-tracks")
+    ) {
+      console.log(collectionInfo);
+      dispatch(setCurrentQueue(collectionInfo as SimilarTracks));
+      dispatch(setQueueType("similar-tracks"));
+    }
+    if (
       collectionType == "playlist" &&
-      collectionInfo?.trackCount != source.trackCount
+      (collectionInfo as IPlaylist)?.trackCount !=
+        (source as IPlaylist).trackCount
     ) {
       dispatch(setCurrentQueue(collectionInfo as IPlaylist));
       dispatch(setQueueType("playlist"));
@@ -97,7 +107,8 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
       dispatch(setIsPlaying(true));
     }
   };
-  const handleStop = () => {
+  const handleStop = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+    e.stopPropagation();
     dispatch(setIsPlaying(false));
   };
 
@@ -105,11 +116,14 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
     <div className={styles.controlButtonContainer}>
       <IconContext.Provider value={{ size: "24px" }}>
         {id != currentTrackId || (id == currentTrackId && !isTrackPlaying) ? (
-          <BiPlay onClick={handlePlay} className={styles.playButton} />
+          <BiPlay
+            onClick={(e) => handlePlay(e)}
+            className={styles.playButton}
+          />
         ) : (
           <div>
             <AiOutlinePause
-              onClick={handleStop}
+              onClick={(e) => handleStop(e)}
               className={styles.pauseButton}
             />
             <div className={styles.playingTrackAnimationContainer}>

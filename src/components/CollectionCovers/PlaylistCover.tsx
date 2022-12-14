@@ -8,6 +8,8 @@ import {
   setIsCollectionSelected,
   status as playlistStatus,
   selectedCollection as source,
+  setIsTrackSelected,
+  setItemMetadata,
 } from "../../store/reducers/selectedItemSlice";
 import { CoverPlayButton } from "./CoverPlayButton";
 import { Link } from "react-router-dom";
@@ -15,9 +17,10 @@ import { covers } from "../../img/coverStocks/allDefaultCovers";
 
 interface Props {
   playlistInfo: IPlaylist | undefined;
+  metadata: string;
 }
 
-export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
+export const PlaylistCover: FC<Props> = ({ playlistInfo, metadata }) => {
   const dispatch = useDispatch<AppDispatch>();
   const collectionStatus = useSelector(playlistStatus);
   const selectedPlaylist = useSelector(source);
@@ -34,7 +37,9 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
           kind: playlistInfo?.kind,
         })
       );
+      dispatch(setIsTrackSelected(false));
       dispatch(setIsCollectionSelected(true));
+      dispatch(setItemMetadata(metadata));
     }
     return;
   };
@@ -74,7 +79,10 @@ export const PlaylistCover: FC<Props> = ({ playlistInfo }) => {
               alt="cover"
             ></img>
           ) : (
-            <img src={covers[Math.floor(Math.random() * 4)]} alt="cover"></img>
+            <img
+              src={covers[Math.floor(Math.random() * covers.length)]}
+              alt="cover"
+            ></img>
           )}
         </>
       </div>

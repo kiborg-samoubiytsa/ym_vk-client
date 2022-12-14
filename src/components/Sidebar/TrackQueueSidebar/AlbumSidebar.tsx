@@ -20,8 +20,8 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
   return (
     <div>
       <div className="playlist">
-        <span className="sidebar_collection_title">{album.title}</span>
-        <div className="playlistOwner">
+        <span className="sidebar_collectionTitle">{album.title}</span>
+        <div className="sidebar_collectionOwner">
           <span className="defaultText">Исполнитель: </span>
           {concatArtistNames(album.artists)}
         </div>

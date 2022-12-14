@@ -1,19 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AlbumWithTracks, IPlaylist } from "../../types/types";
+import {
+  AlbumWithTracks,
+  IPlaylist,
+  SimilarTracks,
+  Track,
+} from "../../types/types";
 import { RootState } from "../store";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 interface tracksState {
-  status: "idle" | "loading" | "succeeded" | "failed";
   tracksUrl: string[];
-  currentQueue: IPlaylist | AlbumWithTracks;
+  currentQueue: IPlaylist | AlbumWithTracks | SimilarTracks;
   isDisplayed: boolean;
   error: string | undefined;
-  type: "playlist" | "album" | "not-selected";
+  type: "playlist" | "album" | "not-selected" | "similar-tracks";
 }
 
 const initialState: tracksState = {
-  status: "idle",
   tracksUrl: [],
   currentQueue: {} as Required<IPlaylist> | AlbumWithTracks,
   error: undefined,
@@ -25,7 +28,10 @@ const queueSlice = createSlice({
   name: "currentQueue",
   initialState,
   reducers: {
-    setCurrentQueue(state, action: PayloadAction<IPlaylist | AlbumWithTracks>) {
+    setCurrentQueue(
+      state,
+      action: PayloadAction<IPlaylist | AlbumWithTracks | SimilarTracks>
+    ) {
       state.currentQueue = action.payload;
     },
     setQueueType(state, action: PayloadAction<tracksState["type"]>) {
@@ -36,7 +42,6 @@ const queueSlice = createSlice({
 export const { setCurrentQueue, setQueueType } = queueSlice.actions;
 export const currentQueue = (state: RootState) =>
   state.currentQueueSlice.currentQueue;
-export const status = (state: RootState) => state.currentQueueSlice.status;
 export const isVisible = (state: RootState) =>
   state.currentQueueSlice.isDisplayed;
 export const queueType = (state: RootState) => state.currentQueueSlice.type;
