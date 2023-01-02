@@ -16,7 +16,7 @@ export const UserPodcasts: FC = () => {
     ? JSON.parse(sessionStorage.getItem("user-podcasts") || "")
     : [];
   const { data, error } = useFetch<Album[]>(
-    `http://localhost:3002/user-albums/podcasts/uid=${userData.uid}/token=${userData.token}`
+    `https://zvuk-ponosa.glitch.me/api/user-albums/podcasts/uid=${userData.uid}/token=${userData.token}`
   );
   useEffect(() => {
     if (favoriteTracks.length == 0) {

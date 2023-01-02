@@ -34,8 +34,9 @@ export const fetchPlaylist = createAsyncThunk(
   "collection/fetchPlaylist",
   async ({ user, kind }: any): Promise<IPlaylist> => {
     console.log(user, kind);
+    const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/playlists/info/user=${user}/kind=${kind}/`
+      `https://zvuk-ponosa.glitch.me/api/playlists/info/user=${user}/kind=${kind}/token=${userData.token}`
     );
     console.log(data);
     return data;
@@ -44,8 +45,9 @@ export const fetchPlaylist = createAsyncThunk(
 export const fetchAlbum = createAsyncThunk(
   "collection/fetchAlbum",
   async ({ albumId }: any): Promise<AlbumWithTracks> => {
+    const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/album/with-tracks/id=${albumId}`
+      `https://zvuk-ponosa.glitch.me/api/album/with-tracks/id=${albumId}/token=${userData.token}`
     );
     return data;
   }
@@ -62,10 +64,10 @@ export const fetchTrackInfo = createAsyncThunk(
   }> => {
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data: trackSupplement } = await axios.get(
-      `http://localhost:3002/track/supplement/id=${trackId}/token=${userData.token}`
+      `https://zvuk-ponosa.glitch.me/api/track/supplement/id=${trackId}/token=${userData.token}`
     );
     const { data: similarTracks } = await axios.get(
-      `http://localhost:3002/track/similar/id=${trackId}/token=${userData.token}`
+      `https://zvuk-ponosa.glitch.me/api/track/similar/id=${trackId}/token=${userData.token}`
     );
     console.log(trackSupplement.lyrics, similarTracks);
     return { supplement: trackSupplement, similar: similarTracks };

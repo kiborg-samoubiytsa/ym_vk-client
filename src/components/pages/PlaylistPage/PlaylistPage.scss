@@ -7,10 +7,12 @@
   margin-bottom: 400px;
   .playlistSupplement {
     display: flex;
+    padding-left: 20px;
+    padding-top: 30px;
+    padding-bottom: 20px;
     .playlistCover {
       width: 200px;
       height: 200px;
-      align-self: flex-start;
     }
     .playlistInfo {
       margin-top: 15px;

@@ -1,5 +1,4 @@
 import { UserPlaylists } from "../UserPages/UserPlaylists";
-import { TracksSidebar } from "../Sidebar/TracksSidebar";
 import { Sidebar } from "../Sidebar/Sidebar";
 import { useSelectedItemReset } from "../../hooks/useSelectedItemReset";
 

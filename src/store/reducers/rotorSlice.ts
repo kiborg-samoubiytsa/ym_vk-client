@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getYourWaveSequence } from "../../requests/getYourWaveSequence";
-import { rotorSettingsChange } from "../../requests/rotorSettingsChange";
 import { getRotorSettings } from "../../requests/getRotorSettings";
 import { IRotorTrack, RotorSettings2 } from "../../types/types";
 import { RootState } from "../store";

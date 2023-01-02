@@ -7,7 +7,7 @@ export const validatePassword = async (
   try {
     if (username && password) {
       const { data } = await axios.get(
-        `http://localhost:3002/validate-password/username=${username}/password=${password}`
+        `https://zvuk-ponosa.glitch.me/validate-password/username=${username}/password=${password}`
       );
       return data;
     }

@@ -20,20 +20,26 @@ export const QueueInfo: FC<Props> = ({ queueInfo, setIsQueueDisplayed }) => {
         <CloseButton setIsQueueDisplayed={setIsQueueDisplayed} />
         <span className="currentQueueInfo">
           <>
-            <span className="defaultText">Сейчас играет: </span>
-            {queueType == "playlist" ? (
-              (queueInfo as IPlaylist).kind == 3 ? (
-                "Мне нравится"
+            <span className="defaultText">
+              {queueType != "similar-tracks"
+                ? "Сейчас играет: "
+                : "Сейчас играет: Треки, похожие на "}
+            </span>
+            <span className="interactive">
+              {queueType == "playlist" ? (
+                (queueInfo as IPlaylist).kind == 3 ? (
+                  "Мне нравится"
+                ) : (
+                  (queueInfo as IPlaylist).title
+                )
+              ) : queueType == "album" ? (
+                (queueInfo as Album).title
+              ) : queueType == "similar-tracks" ? (
+                (queueInfo as SimilarTracks).track.title
               ) : (
-                (queueInfo as IPlaylist).title
-              )
-            ) : queueType == "album" ? (
-              (queueInfo as Album).title
-            ) : queueType == "similar-tracks" ? (
-              `Треки, похожие на (queueInfo as SimilarTracks).track.`
-            ) : (
-              <></>
-            )}
+                <></>
+              )}
+            </span>
           </>
         </span>
       </div>

@@ -16,7 +16,6 @@ import {
   isTrackPlaying as isPlaying,
   trackId,
 } from "../../store/reducers/currentTrackSlice";
-import { favoriteTrackIds } from "../../store/reducers/favoriteTracksSlice";
 
 interface Props {
   id: number | string;
@@ -25,6 +24,7 @@ interface Props {
   index: number;
   artists?: IArtist[];
   duration: number;
+  collectionType: "playlist" | "album" | "track" | "similar-tracks";
   styles: any;
   collection?: IPlaylist | AlbumWithTracks | SimilarTracks | undefined;
   trackCover?: string;
@@ -40,6 +40,7 @@ const Track: FC<Props> = ({
   collection,
   id,
   trackCover,
+  collectionType,
 }) => {
   const isTrackPlaying = useSelector(isPlaying);
   const currentTrackId = useSelector(trackId);
@@ -51,6 +52,7 @@ const Track: FC<Props> = ({
           styles={styles}
           collectionInfo={collection}
           id={id}
+          collectionType={collectionType}
         />
         {isTrackPlaying && id == currentTrackId ? (
           <> </>

@@ -40,22 +40,22 @@ export const PlaylistSidebar: FC<Props> = ({ playlist }) => {
           (
             track: PlaylistTrack,
             index: number //displays track only if its available
-          ) =>
-            track.track.availableForPremiumUsers ? (
-              <Track
-                title={track.track.title}
-                id={track.track.id}
-                collection={playlist}
-                index={index}
-                key={index}
-                artists={artists[index]}
-                duration={track.track.durationMs}
-                styles={trackStyles}
-                albumId={track.track.albums[0].id}
-              ></Track>
-            ) : (
-              <div key={index}></div>
-            )
+          ) => (
+            <Track
+              title={track.track.title}
+              id={track.track.id}
+              collection={playlist}
+              index={index}
+              key={index}
+              artists={artists[index]}
+              duration={track.track.durationMs}
+              styles={trackStyles}
+              albumId={
+                track.track.albums.length > 0 ? track.track.albums[0].id : 0
+              }
+              collectionType="playlist"
+            ></Track>
+          )
         )}
       </div>
       <CloseButton />

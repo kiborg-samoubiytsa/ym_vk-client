@@ -18,6 +18,26 @@
     cursor: pointer;
     color: #a7a2a3;
   }
+  .sidebar_trackLyrics {
+    font-family: "Source Sans Pro", sans-serif;
+    white-space: pre-wrap;
+    padding-bottom: 20px;
+    line-height: 24px;
+  }
+  .sidebar_showtextButton {
+    position: relative;
+    margin-top: 20px;
+  }
+  .sidebar_trackLyricsOverlay {
+    position: relative;
+    display: flex;
+    background-color: white;
+    box-shadow: 1px 0px 20px 35px rgba(255, 255, 255, 0.85);
+    overflow-y: hidden;
+  }
+  .sidebar_trackLyricsOverlay-hidden {
+    display: none;
+  }
   .closeButton:hover {
     transition: 200ms;
     color: #222021;

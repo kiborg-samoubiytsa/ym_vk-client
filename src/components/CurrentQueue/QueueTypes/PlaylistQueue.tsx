@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { IPlaylist, PlaylistTrack } from "../../types/types";
-import Track from "../Track/Track";
-import trackStyles from "../Track/PageTrack.module.scss";
+import { IPlaylist, PlaylistTrack } from "../../../types/types";
+import Track from "../../Track/Track";
+import trackStyles from "../../Track/PageTrack.module.scss";
 
 interface Props {
   currentQueue: Required<IPlaylist>;
@@ -26,6 +26,7 @@ export const PlaylistQueue: FC<Props> = ({ currentQueue }) => {
             duration={track.track.durationMs}
             styles={trackStyles}
             albumId={track.track.albums[0].id}
+            collectionType="playlist"
           ></Track>
         ) : (
           <div key={index}></div>

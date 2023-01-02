@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  AlbumWithTracks,
-  IPlaylist,
-  SimilarTracks,
-  Track,
-} from "../../types/types";
+import { AlbumWithTracks, IPlaylist, SimilarTracks } from "../../types/types";
 import { RootState } from "../store";
 import { PayloadAction } from "@reduxjs/toolkit";
 
@@ -13,7 +8,7 @@ interface tracksState {
   currentQueue: IPlaylist | AlbumWithTracks | SimilarTracks;
   isDisplayed: boolean;
   error: string | undefined;
-  type: "playlist" | "album" | "not-selected" | "similar-tracks";
+  type: "playlist" | "album" | "not-selected" | "similar-tracks" | "track";
 }
 
 const initialState: tracksState = {

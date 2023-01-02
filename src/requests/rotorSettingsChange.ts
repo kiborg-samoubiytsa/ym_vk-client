@@ -13,7 +13,7 @@ export const rotorSettingsChange = async (
   //TODO сделать интерфейс для station
   const userData = JSON.parse(localStorage.getItem("user-data") || "");
   await axios.post(
-    `http://localhost:3002/rotor/station=${station}/settings/uid=${userData.uid}/token=${userData.token}`,
+    `https://zvuk-ponosa.glitch.me/api/rotor/station=${station}/settings/uid=${userData.uid}/token=${userData.token}`,
     settings
   );
 };

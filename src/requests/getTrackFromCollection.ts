@@ -5,13 +5,12 @@ export const getQueueFromCollection = async (
   collection: Album | IPlaylist
 ): Promise<AlbumWithTracks | IPlaylist> => {
   const userData = JSON.parse(localStorage.getItem("user-data") || "");
-
   const url =
     type == "album"
-      ? `http://localhost:3002/album/with-tracks/id=/${
+      ? `https://zvuk-ponosa.glitch.me/api/album/with-tracks/id=/${
           (collection as Album).id
         }`
-      : `http://localhost:3002/playlists/info/user=${
+      : `https://zvuk-ponosa.glitch.me/api/playlists/info/user=${
           (collection as IPlaylist).owner.login
         }/kind=${(collection as IPlaylist).kind}/username=${
           userData.username

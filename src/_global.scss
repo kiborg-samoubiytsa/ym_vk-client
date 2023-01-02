@@ -1,4 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap");
+@import url("https://cdn.glitch.global/ec0422d0-61e3-47a6-a95a-7c0a765353a4/SourceSansPro-Regular.ttf?v=1672604098234");
+
 .defaultText {
   color: #777;
   font-family: "Source Sans Pro", sans-serif;
+}
+.interactive {
+  cursor: pointer;
+  color: #5d6fe4;
+}
+.interactive:hover {
+  user-select: none;
 }

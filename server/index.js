@@ -188,7 +188,6 @@ app.get(/\/track\/supplement\/id=(.+)\/token=(.+)/, async (req, res) => {
         },
       }
     );
-    const trackInfo = await api.getTrack(parseInt(trackId));
     console.log(data);
     res.send(data.result);
   } catch (error) {
@@ -347,7 +346,6 @@ app.get(/\/user-albums\/uid=(.+)\/token=(.+)/, async (req, res) => {
     console.log(error);
   }
 });
-
 app.get(/\/user-albums\/podcasts\/uid=(.+)\/token=(.+)/, async (req, res) => {
   try {
     const uid = req.params[0];
@@ -368,7 +366,6 @@ app.get(/\/user-albums\/podcasts\/uid=(.+)\/token=(.+)/, async (req, res) => {
     console.log(error);
   }
 });
-
 app.get(/tracks\/favorite\/uid=(.+)\/token=(.+)/, async (req, res) => {
   try {
     const uid = req.params[0];
@@ -390,6 +387,6 @@ app.get(/tracks\/favorite\/uid=(.+)\/token=(.+)/, async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
+app.listen({ port: PORT, host: "0.0.0.0" }, () => {
   console.log(PORT);
 });

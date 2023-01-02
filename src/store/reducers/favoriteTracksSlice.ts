@@ -17,7 +17,7 @@ export const fetchFavoriteTracks = createAsyncThunk(
   async () => {
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/tracks/favorite/uid=${userData.uid}/token=${userData.token}`
+      `https://zvuk-ponosa.glitch.me/api/tracks/favorite/uid=${userData.uid}/token=${userData.token}`
     );
     return data;
   }

@@ -19,7 +19,6 @@ import { UserPodcastsPage } from "./pages/UserPodcastsPage";
 import { PlaylistPage } from "./pages/PlaylistPage/PlaylistPage";
 const App: FC = () => {
   //TODO менять текущий плейлист только по нажатию на трек
-  const { playlistId } = useParams();
   const [isQueueDisplayed, setIsQueueDisplayed] = useState(false);
   return (
     <>

@@ -26,19 +26,25 @@ import { collectionType as selectedCollectionType } from "../../store/reducers/s
 
 interface Props {
   collectionInfo?: IPlaylist | AlbumWithTracks | SimilarTracks;
+  collectionType: "playlist" | "album" | "track" | "similar-tracks";
   index: number;
   styles: any;
   id: string | number;
 }
 
-const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
+const PlayButton: FC<Props> = ({
+  index,
+  styles,
+  collectionInfo,
+  id,
+  collectionType,
+}) => {
   //useDispatch
   const dispatch = useDispatch<AppDispatch>();
   //useSelectors
   const source = useSelector(currentQueue);
   const sourceType = useSelector(queueType);
   const currentTrackId = useSelector(trackId);
-  const collectionType = useSelector(selectedCollectionType);
 
   const isPlayerVisible = useSelector(isVisible);
   const isTrackPlaying = useSelector(isPlaying);
@@ -93,7 +99,9 @@ const PlayButton: FC<Props> = ({ index, styles, collectionInfo, id }) => {
       (collectionType == "track" || collectionType == "similar-tracks")
     ) {
       console.log(collectionInfo);
-      dispatch(setCurrentQueue(collectionInfo as SimilarTracks));
+      dispatch(
+        setCurrentQueue(collectionInfo as SimilarTracks as SimilarTracks)
+      );
       dispatch(setQueueType("similar-tracks"));
     }
     if (

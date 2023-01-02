@@ -29,7 +29,7 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
       {volumes.map((volume, i) => (
         <div className="sidebar_tracks" key={i}>
           {volume.map((track, index) =>
-            track.availableForPremiumUsers ? ( //displays track only if its available
+            track.available ? ( //displays track only if its available
               <Track
                 title={track.title}
                 id={track.id}
@@ -39,6 +39,7 @@ export const AlbumSidebar: FC<Props> = ({ album }) => {
                 styles={trackStyles}
                 collection={album}
                 albumId={album.id}
+                collectionType="album"
               ></Track>
             ) : (
               <div key={index}></div>

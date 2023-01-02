@@ -27,6 +27,7 @@ export const PlaylistPage = () => {
   const location = useLocation();
   const splittedUrl = location.pathname.split("/");
   const userId = splittedUrl[2];
+  const userData = JSON.parse(localStorage.getItem("user-data") || "");
   const playlistKind = splittedUrl[4];
   const favoriteTracks = useSelector(favoriteTrackIds);
   const {
@@ -34,13 +35,14 @@ export const PlaylistPage = () => {
     error,
     state,
   } = useFetch<IPlaylist>(
-    `http://localhost:3002/playlists/info/user=${userId}/kind=${playlistKind}/`
+    `https://zvuk-ponosa.glitch.me/api/playlists/info/user=${userId}/kind=${playlistKind}/token=${userData.token}`
   );
   useEffect(() => {
     if (favoriteTracks.length == 0) {
       dispatch(fetchFavoriteTracks());
     }
-    dispatch(setSelectedItemType("playlist"));
+    dispatch(setSelectedItemType("not-selected"));
+    dispatch(setIsCollectionSelected(false));
   }, []);
 
   const handleTrackSelect = (track: PlaylistTrack) => {
@@ -48,6 +50,7 @@ export const PlaylistPage = () => {
     dispatch(setIsTrackSelected(true));
     dispatch(setIsCollectionSelected(false));
   };
+
   return (
     <div className="User-Collection">
       <div className="content">
@@ -93,33 +96,32 @@ export const PlaylistPage = () => {
           </div>
         </div>
         {collection ? (
-          collection.tracks!.map((track, index) =>
-            track.track.availableForPremiumUsers ? (
-              <div
-                onClick={() => {
-                  handleTrackSelect(track);
-                }}
-                className="trackWrapper"
-              >
-                <Track
-                  id={track.id}
-                  title={track.track.title}
-                  index={index}
-                  duration={track.track.durationMs}
-                  artists={track.track.artists}
-                  albumId={track.track.albums[0].id}
-                  collection={collection as IPlaylist}
-                  styles={trackStyles}
-                  trackCover={`https://${track.track.coverUri?.replace(
-                    "%%",
-                    "50x50"
-                  )}`}
-                />
-              </div>
-            ) : (
-              <></>
-            )
-          )
+          collection.tracks!.map((track, index) => (
+            <div
+              onClick={() => {
+                handleTrackSelect(track);
+              }}
+              className="trackWrapper"
+            >
+              <Track
+                id={track.id}
+                title={track.track.title}
+                index={index}
+                duration={track.track.durationMs}
+                artists={track.track.artists}
+                albumId={
+                  track.track.albums[0]?.id ? track.track.albums[0].id : 0
+                }
+                collection={collection as IPlaylist}
+                collectionType="playlist"
+                styles={trackStyles}
+                trackCover={`https://${track.track.coverUri?.replace(
+                  "%%",
+                  "50x50"
+                )}`}
+              />
+            </div>
+          ))
         ) : (
           <></>
         )}

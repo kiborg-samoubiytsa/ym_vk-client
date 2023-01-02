@@ -36,7 +36,7 @@ export const fetchTrackUrl = createAsyncThunk(
 
     const userData = JSON.parse(localStorage.getItem("user-data") || "");
     const { data } = await axios.get(
-      `http://localhost:3002/get-mp3-link/id=${id}/uid=${userData.uid}/token=${userData.token}`
+      `https://zvuk-ponosa.glitch.me/api/get-mp3-link/id=${id}/uid=${userData.uid}/token=${userData.token}`
     );
     console.log(data);
     return { url: data.url, info: data.info[0] };
@@ -78,10 +78,10 @@ const currentTrack = createSlice({
         state.status = "succeeded";
         state.currentTrackUrl = action.payload.url;
         state.currentTrackArtists = action.payload.info.artists;
-        state.currentTrackCover = `https://${action.payload.info.coverUri.replace(
-          "%%",
-          "50x50"
-        )}`;
+        console.log(action.payload.info);
+        state.currentTrackCover =
+          `https://${action.payload.info.coverUri?.replace("%%", "50x50")}` ||
+          "";
         state.currentTrackTitle = action.payload.info.title;
       })
       .addCase(fetchTrackUrl.rejected, (state) => {
